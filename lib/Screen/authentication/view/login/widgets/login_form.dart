@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:goma/Screen/authentication/view/signUp/companyRegistrationPage/companyRegistration.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../../utils/constants/sizes.dart';
@@ -128,7 +129,7 @@ class _TLoginFormState extends State<TLoginForm> {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
-                  onPressed: () => Get.to(() => const ChooseUserType()),
+                  onPressed: () => THelperFunctions.navigateToScreen(context,ChooseUserType()),
                   child: const Text(TTexts.createAccount),
                 ),
               ),
