@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../utils/constants/colors.dart';
-import 'vehicle_data.dart';
+import 'vehicle_model.dart';
 import 'widgets/vehicle_card.dart';
 
 class VehicleDetailsPage extends StatelessWidget {

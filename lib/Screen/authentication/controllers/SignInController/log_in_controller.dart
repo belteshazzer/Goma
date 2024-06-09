@@ -5,9 +5,12 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../utils/helpers/helper_functions.dart';
 import '../../../api_path.dart';
+import 'get_vehicle.dart';
+import 'package:goma/Screen/add_vehicle/add_vehicle.dart';
 
 class LoginController {
   static Future<Map<String, dynamic>> login(BuildContext context, String username, String password) async {
+
     final TextEditingController usernameController = TextEditingController(text: username);
     final TextEditingController passwordController = TextEditingController(text: password);
     late SharedPreferences prefs;
@@ -36,7 +39,7 @@ class LoginController {
       );
 
       if (response.statusCode == 200) {
-        // Login successful
+
         final Map<String, dynamic> responseData = json.decode(response.body);
         final String accessToken = responseData['access'];
         final String refreshToken = responseData['refresh'];
@@ -55,23 +58,24 @@ class LoginController {
         print(userResponse.statusCode);
         print(userResponse.body); 
         if (userResponse.statusCode == 200) {
-          print("here");
-          final responseData = json.decode(userResponse.body);
-          print(responseData);
-          final String ownerId = responseData['id'];
-          print(ownerId);
+          final userData = json.decode(userResponse.body);
+          final String ownerId = userData['id'];
 
           // Store owner ID in SharedPreferences
           prefs.setString('ownerId', ownerId);
+
           setState(false, '');
 
           //Todo: 
           
-          THelperFunctions.navigateToScreen(
-            context,
-            BottomNavBar(),
-          );
-          
+          final vehicles = await GetVehicle.getVehiclesByOwnerId(ownerId);
+
+          if (vehicles == null || vehicles.isEmpty) {
+            THelperFunctions.navigateToScreen(context, const AddVehicleScreen());
+          } else {
+            THelperFunctions.navigateToScreen(context, const BottomNavBar());
+          }
+
         } else {
           setState(false, 'Failed to fetch user data.');
         }

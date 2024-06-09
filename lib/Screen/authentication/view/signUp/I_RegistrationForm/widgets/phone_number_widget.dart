@@ -32,7 +32,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
       onChanged: (value) {
         setState(() {
           widget.phoneNumberController?.value = value;
-          borderColor = value == null ? const Color(0xFFE91e63) : Colors.grey.shade300;
+          borderColor = Colors.grey.shade300;
         });
       },
     );

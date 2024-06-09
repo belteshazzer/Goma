@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:goma_notify/screens/add_vehicle/widgets/input_form.dart';
-import '../vehicle_data.dart';
+import '../vehicle_model.dart';
 
 class VehicleDetailsCard extends StatelessWidget {
   final Vehicle vehicle;
@@ -38,11 +38,8 @@ class VehicleDetailsCard extends StatelessWidget {
             const SizedBox(height: 20.0),
             _buildDetailRow('ID', vehicle.id, textColor),
             _buildDetailRow(
-                'Description', vehicle.description, textColor),
-            _buildDetailRow('Make', vehicle.make, textColor),
-            _buildDetailRow('Model', vehicle.model, textColor),
-            _buildDetailRow(
-                'Year', vehicle.year.toString(), textColor),
+                'Owner', vehicle.owner, textColor),
+            _buildDetailRow('Make', vehicle.plate_number, textColor),
           ],
         ),
       ),
