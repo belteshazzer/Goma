@@ -95,121 +95,138 @@ class _HomePageState extends State<HomePage> {
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              return Stack(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: horizontalPadding,
-                      vertical: verticalPadding,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("G-NOTIFY"),
-                        Row(
-                          children: [
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const NotificationListPage()),
-                                  );
-                                },
-                                icon: Icon(Icons.notifications_active,
-                                    size: 45, color: Colors.grey[800])),
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SettingsPage2()),
-                                  );
-                                },
-                                icon: Icon(Icons.person,
-                                    size: 45, color: Colors.grey[800])),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Welcome ${user?['first_name']},",
-                          style: TextStyle(fontSize: 20, color: Colors.grey.shade800),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 25),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 40.0),
-                    child: Divider(
-                      thickness: 1,
-                      color: Color.fromARGB(255, 204, 204, 204),
-                    ),
-                  ),
-                  const SizedBox(height: 25),
-                  Container(
-                    height: 200,
-                    color: Colors.white,
-                    child: GestureDetector(
-                      onPanDown: (_) {
-                        setState(() {
-                          _isUserInteracting = true;
-                          _stopAutoScroll();
-                        });
-                      },
-                      onPanCancel: () {
-                        setState(() {
-                          _isUserInteracting = false;
-                          _startAutoScroll();
-                        });
-                      },
-                      onPanEnd: (_) {
-                        setState(() {
-                          _isUserInteracting = false;
-                          _startAutoScroll();
-                        });
-                      },
-                      child: ListView(
-                        controller: _scrollController,
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.all(16.0),
-                        children: const [
-                          BuildCard(
-                            icon: Icons.policy,
-                            statement: 'Insurance Payment',
-                          ),
-                          SizedBox(width: 12),
-                          BuildCard(
-                            icon: Icons.money,
-                            statement: 'Road Fund Payment',
-                          ),
-                          SizedBox(width: 12),
-                          BuildCard(
-                            icon: Icons.car_rental,
-                            statement: 'Car Renewal Payment',
-                          ),
-                          SizedBox(width: 12),
-                        ],
-                      ),
-                    ),
-                  )
+                  _buildMainContent(),
+                  if (snapshot.connectionState == ConnectionState.waiting)
+                    _buildShimmerEffect(),
                 ],
               );
             }
           },
         ),
       ),
+    );
+  }
+
+  Widget _buildMainContent() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: horizontalPadding,
+            vertical: verticalPadding,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("G-NOTIFY"),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NotificationListPage()),
+                      );
+                    },
+                    child: Icon(
+                      Icons.notifications_active,
+                      size: 45,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SettingsPage2()),
+                      );
+                    },
+                    child: Icon(
+                      Icons.person,
+                      size: 45,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 20),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Welcome ${user?['first_name']},",
+                style: TextStyle(fontSize: 20, color: Colors.grey.shade800),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 25),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 40.0),
+          child: Divider(
+            thickness: 1,
+            color: Color.fromARGB(255, 204, 204, 204),
+          ),
+        ),
+        const SizedBox(height: 25),
+        Container(
+          height: 200,
+          color: Colors.white,
+          child: GestureDetector(
+            onPanDown: (_) {
+              setState(() {
+                _isUserInteracting = true;
+                _stopAutoScroll();
+              });
+            },
+            onPanCancel: () {
+              setState(() {
+                _isUserInteracting = false;
+                _startAutoScroll();
+              });
+            },
+            onPanEnd: (_) {
+              setState(() {
+                _isUserInteracting = false;
+                _startAutoScroll();
+              });
+            },
+            child: ListView(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.all(16.0),
+              children: const [
+                BuildCard(
+                  icon: Icons.policy,
+                  statement: 'Insurance Payment',
+                ),
+                SizedBox(width: 12),
+                BuildCard(
+                  icon: Icons.money,
+                  statement: 'Road Fund Payment',
+                ),
+                SizedBox(width: 12),
+                BuildCard(
+                  icon: Icons.car_rental,
+                  statement: 'Car Renewal Payment',
+                ),
+                SizedBox(width: 12),
+              ],
+            ),
+          ),
+        )
+      ],
     );
   }
 
@@ -362,7 +379,7 @@ class BuildCard extends StatelessWidget {
                   foregroundColor: Colors.white,
                   backgroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0), // Less curved
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
                 child: const Text('Pay Now'),
