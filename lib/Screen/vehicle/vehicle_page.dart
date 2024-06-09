@@ -89,14 +89,14 @@ class _VehicleListPageState extends State<VehicleListPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '${vehicles[index].id} - ${vehicles[index].description}',
+                                      '${vehicles[index].id} - ${vehicles[index].plate_number}',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: textColor,
                                       ),
                                     ),
                                     Text(
-                                      '${vehicles[index].make} ${vehicles[index].model} (${vehicles[index].year})',
+                                      'chassis no_: ${vehicles[index].chassis_number}',
                                       style: TextStyle(color: textColor),
                                     ),
                                   ],

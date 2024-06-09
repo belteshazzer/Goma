@@ -1,25 +1,22 @@
 class Vehicle {
   final String id;
-  final String description;
-  final String make;
-  final String model;
-  final int year;
+  final String plate_number;
+  final String chassis_number;
+  final String owner;
 
   Vehicle({
     required this.id,
-    required this.description,
-    required this.make,
-    required this.model,
-    required this.year,
+    required this.plate_number,
+    required this.chassis_number,
+    required this.owner,
   });
 
   factory Vehicle.fromJson(Map<String, dynamic> json) {
     return Vehicle(
       id: json['id'],
-      description: json['description'],
-      make: json['make'],
-      model: json['model'],
-      year: json['year'],
+      chassis_number: json['description'],
+      plate_number: json['make'],
+      owner: json['model'],
     );
   }
 }

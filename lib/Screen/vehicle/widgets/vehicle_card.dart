@@ -38,11 +38,8 @@ class VehicleDetailsCard extends StatelessWidget {
             const SizedBox(height: 20.0),
             _buildDetailRow('ID', vehicle.id, textColor),
             _buildDetailRow(
-                'Description', vehicle.description, textColor),
-            _buildDetailRow('Make', vehicle.make, textColor),
-            _buildDetailRow('Model', vehicle.model, textColor),
-            _buildDetailRow(
-                'Year', vehicle.year.toString(), textColor),
+                'Owner', vehicle.owner, textColor),
+            _buildDetailRow('Make', vehicle.plate_number, textColor),
           ],
         ),
       ),
