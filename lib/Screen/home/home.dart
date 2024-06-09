@@ -33,9 +33,10 @@ class _HomePageState extends State<HomePage> {
     _userId = prefs.getString('ownerId');
     _userToken = prefs.getString('accessToken') ?? '';
 
-    final url = Uri.parse("$AuthenticationUrl/users/in/create/$_userId");
+    final url = Uri.parse("$AuthenticationUrl/users/in/create/$_userId/");
     final http.Response response = await http.get(url, headers: {"Authorization": "JWT $_userToken"});
-
+    
+    print("response ${response.body} ${response.statusCode}");
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       setState(() {

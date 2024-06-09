@@ -56,7 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _userId = prefs.getString('ownerId');
     _userToken = prefs.getString('accessToken') ?? '';
 
-    final url = Uri.parse("$AuthenticationUrl/users/in/create/$_userId");
+    final url = Uri.parse("$AuthenticationUrl/users/in/create/$_userId/");
     final http.Response response = await http.get(url, headers: {"Authorization": "JWT $_userToken"});
 
     if (response.statusCode == 200) {
