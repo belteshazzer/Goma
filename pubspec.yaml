@@ -65,6 +65,7 @@ dependencies:
   fancy_password_field: ^2.0.6
   email_validator: ^2.1.17
   phone_form_field: ^9.2.5
+  shimmer: ^3.0.0
 
 
 

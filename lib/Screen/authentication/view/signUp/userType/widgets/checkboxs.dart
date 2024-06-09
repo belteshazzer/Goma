@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../../../../../utils/constants/sizes.dart';
 import '../../../../models/user_type_model.dart';
-import 'next_button.dart';
+import '../../I_RegistrationForm/IndividualRegistration.dart';
+import '../../companyRegistrationPage/companyRegistration.dart';
+
 
 class CheckBoxes extends StatefulWidget {
   const CheckBoxes({super.key});
@@ -12,6 +14,20 @@ class CheckBoxes extends StatefulWidget {
 
 class _CheckBoxesState extends State<CheckBoxes> {
   final UserTypeModel userTypeModel = UserTypeModel(isIndividual: false, isCompany: false);
+
+  void _navigateToRegistrationForm(BuildContext context, bool isIndividual) {
+    if (isIndividual) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => I_RegistrationForm()),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => C_RegistrationForm()),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,40 +40,48 @@ class _CheckBoxesState extends State<CheckBoxes> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Checkbox(
-                value: userTypeModel.isIndividual,
-                onChanged: (bool? value) {
+              TextButton(
+                onPressed: () {
                   setState(() {
-                    userTypeModel.isIndividual = value!;
-                    userTypeModel.isCompany = !userTypeModel.isIndividual;
+                    userTypeModel.isIndividual = true;
+                    userTypeModel.isCompany = false;
                   });
+                  _navigateToRegistrationForm(context, true);
                 },
+                child: const Text(
+                  'Individual',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.blue, // Customize the color as needed
+                  ),
+                ),
               ),
-              const SizedBox(width: 10),
-              const Text('individual'),
             ],
           ),
           const SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Checkbox(
-                value: userTypeModel.isCompany,
-                onChanged: (bool? value) {
+              TextButton(
+                onPressed: () {
                   setState(() {
-                    userTypeModel.isCompany = value!;
-                    userTypeModel.isIndividual = !userTypeModel.isCompany;
+                    userTypeModel.isCompany = true;
+                    userTypeModel.isIndividual = false;
                   });
+                  _navigateToRegistrationForm(context, false);
                 },
+                child: const Text(
+                  'Company',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.blue, // Customize the color as needed
+                  ),
+                ),
               ),
-              const SizedBox(width: 10),
-              const Text('company'),
             ],
           ),
           const SizedBox(height: 4 * TSizes.spaceBtwInputFields),
-          NextIcon(
-            userTypeModel: userTypeModel,
-          ),
+       
         ],
       ),
     );

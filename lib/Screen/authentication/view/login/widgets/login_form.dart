@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:goma/Screen/authentication/view/signUp/companyRegistrationPage/companyRegistration.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../../utils/constants/sizes.dart';
@@ -99,11 +100,7 @@ class _TLoginFormState extends State<TLoginForm> {
                     onPressed: () => THelperFunctions.navigateToScreen(context, const EmailPage()),
                     child: const Text(TTexts.forgetPassword),
                   ),
-                  if (_errorMessage.isNotEmpty)
-                    Text(
-                      _errorMessage,
-                      style: const TextStyle(color: Colors.red),
-                    ),
+                 
                 ],
               ),
               const SizedBox(height: TSizes.spaceBtwInputFields),
@@ -132,7 +129,7 @@ class _TLoginFormState extends State<TLoginForm> {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
-                  onPressed: () => Get.to(() => const ChooseUserType()),
+                  onPressed: () => THelperFunctions.navigateToScreen(context,ChooseUserType()),
                   child: const Text(TTexts.createAccount),
                 ),
               ),

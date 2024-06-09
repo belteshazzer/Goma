@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:goma/Screen/api_path.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../../utils/helpers/helper_functions.dart';
@@ -16,7 +17,7 @@ class forgetPassword {
       errorMessage = error;
     }
 
-    const String apiUrl = 'https://g-notify-user-auth-eb39843fac64.herokuapp.com/users/reset-password-request/';
+    const String apiUrl = '$AuthenticationUrl/users/reset-password-request/';
 
     try {
       setState(true, '');

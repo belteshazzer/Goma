@@ -7,7 +7,6 @@ import '../../../../utils/helpers/helper_functions.dart';
 import '../../../api_path.dart';
 import 'get_vehicle.dart';
 import 'package:goma/Screen/add_vehicle/add_vehicle.dart';
-import 'package:goma/Screen/home/home.dart';
 
 class LoginController {
   static Future<Map<String, dynamic>> login(BuildContext context, String username, String password) async {
@@ -45,16 +44,19 @@ class LoginController {
         final String accessToken = responseData['access'];
         final String refreshToken = responseData['refresh'];
 
+        print(accessToken);
+
         // Store tokens in SharedPreferences
         prefs.setString('accessToken', accessToken);
         prefs.setString('refreshToken', refreshToken);
 
         // Fetch user data to get the owner ID
         final userResponse = await http.get(
-          Uri.parse('$AuthenticationUrl/auth/users/me/'),
+          Uri.parse('$AuthenticationUrl/users/get-user-id/'),
           headers: {'Authorization': 'JWT $accessToken'},
         );
-
+        print(userResponse.statusCode);
+        print(userResponse.body); 
         if (userResponse.statusCode == 200) {
           final userData = json.decode(userResponse.body);
           final String ownerId = userData['id'];
@@ -80,7 +82,7 @@ class LoginController {
         setState(false, errorData['detail']);
       }
     } catch (error) {
-      setState(false, 'Failed to connect to the server. Please try again.');
+      setState(false, error.toString());
     }
 
     return {'isLoading': isLoading, 'errorMessage': errorMessage};
