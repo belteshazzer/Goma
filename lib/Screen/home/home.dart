@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:goma/Screen/api_path.dart';
 import 'package:goma/Screen/notification/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,21 +21,38 @@ class _HomePageState extends State<HomePage> {
   Timer? _timer;
   bool _isUserInteracting = false;
 
-  String _userId = '';
+  String? _userId;
   String _userToken = '';
+  var user;
 
-    Future<void> _loadUserData() async {
+
+  Future<void> _loadUserData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _userId = prefs.getString('ownerId') ?? '';
+      _userId = prefs.getString('ownerId');
       _userToken = prefs.getString('accessToken') ?? '';
     });
+
+    final url = Uri.parse("$AuthenticationUrl/users/in/create/$_userId");
+    final http.Response response = await http.get(url,headers: {"Authorization": "JWT $_userToken"});
+
+    print("response.body ${response.body} ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      user = responseData;
+    } else {
+      // Handle the case when the status code is not 200
+      print("failed");
+    }
+
   }
 
   @override
   void initState() {
     super.initState();
     _startAutoScroll();
+    _loadUserData();
   }
 
   void _startAutoScroll() {
@@ -120,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Welcome $_userId,",
+                    "Welcome ${user['first_name']},",
                     style: TextStyle(fontSize: 20, color: Colors.grey.shade800),
                   ),
                 ],
@@ -186,7 +204,9 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
 }
+
 
 class BuildCard extends StatelessWidget {
   const BuildCard({super.key, required this.icon, required this.statement});
@@ -246,4 +266,5 @@ class BuildCard extends StatelessWidget {
       ),
     );
   }
+  
 }

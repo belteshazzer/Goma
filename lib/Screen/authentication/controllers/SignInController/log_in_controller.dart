@@ -42,29 +42,35 @@ class LoginController {
         final String accessToken = responseData['access'];
         final String refreshToken = responseData['refresh'];
 
+        print(accessToken);
+
         // Store tokens in SharedPreferences
         prefs.setString('accessToken', accessToken);
         prefs.setString('refreshToken', refreshToken);
 
         // Fetch user data to get the owner ID
         final userResponse = await http.get(
-          Uri.parse('$AuthenticationUrl/auth/users/me/'),
+          Uri.parse('$AuthenticationUrl/users/get-user-id/'),
           headers: {'Authorization': 'JWT $accessToken'},
         );
-
+        print(userResponse.statusCode);
+        print(userResponse.body); 
         if (userResponse.statusCode == 200) {
-          final userData = json.decode(userResponse.body);
-          final int ownerId = userData['id'];
+          print("here");
+          final responseData = json.decode(userResponse.body);
+          print(responseData);
+          final String ownerId = responseData['id'];
+          print(ownerId);
 
           // Store owner ID in SharedPreferences
-          prefs.setInt('ownerId', ownerId);
-
+          prefs.setString('ownerId', ownerId);
           setState(false, '');
           
           THelperFunctions.navigateToScreen(
             context,
             BottomNavBar(),
           );
+          
         } else {
           setState(false, 'Failed to fetch user data.');
         }

@@ -99,11 +99,7 @@ class _TLoginFormState extends State<TLoginForm> {
                     onPressed: () => THelperFunctions.navigateToScreen(context, const EmailPage()),
                     child: const Text(TTexts.forgetPassword),
                   ),
-                  if (_errorMessage.isNotEmpty)
-                    Text(
-                      _errorMessage,
-                      style: const TextStyle(color: Colors.red),
-                    ),
+                 
                 ],
               ),
               const SizedBox(height: TSizes.spaceBtwInputFields),
