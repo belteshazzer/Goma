@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../utils/helpers/helper_functions.dart';
 import '../../../api_path.dart';
-import '../../../user_account/account.dart';
+import '../../../setting/account.dart';
 
 class LoginController {
   static Future<Map<String, dynamic>> login(BuildContext context, String username, String password) async {
@@ -79,7 +79,7 @@ class LoginController {
         setState(false, errorData['detail']);
       }
     } catch (error) {
-      setState(false, 'Failed to connect to the server. Please try again.');
+      setState(false, error.toString());
     }
 
     return {'isLoading': isLoading, 'errorMessage': errorMessage};

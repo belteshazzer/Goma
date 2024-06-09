@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:goma/Screen/api_path.dart';
 import 'package:goma/Screen/notification/notification.dart';
-import 'package:goma/Screen/user_account/account.dart';
+import 'package:goma/Screen/setting/account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
