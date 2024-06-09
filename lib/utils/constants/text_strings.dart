@@ -67,7 +67,9 @@ class TTexts {
   static const String homeAppbarTitle = "Good day for shopping";
   static const String homeAppbarSubTitle = "Taimoor Sikander";
 
-  static const String chassisNo = "your vehicle's chassis number";
+  static const String chassisNo = "vehicle's chassis number";
+  static const String insuranceCompany='your insurance company';
+  static const String plateNumber='vehicle\'s plate Number';
   static const String libreNo = "your vehicle's libre number";
   static const String addVehicle= "ADD VEHICLES";
   static const String addVehicleSubTitle="Add Your Vehices Here";

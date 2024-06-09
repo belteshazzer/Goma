@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:goma/Screen/notification/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,13 +18,12 @@ class _HomePageState extends State<HomePage> {
   Timer? _timer;
   bool _isUserInteracting = false;
 
-  String _userId = '';
+  final String _userId = '';
   String _userToken = '';
 
-    Future<void> _loadUserData() async {
+  Future<void> _loadUserData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _userId = prefs.getString('ownerId') ?? '';
       _userToken = prefs.getString('accessToken') ?? '';
     });
   }

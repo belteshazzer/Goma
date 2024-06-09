@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
-
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/helpers/helper_functions.dart';
 import '../../../../utils/theme/widget_themes/text_field_theme.dart';
@@ -58,7 +57,6 @@ class _EmailPageState extends State<EmailPage> {
                     _getOtp(context, _emailController.text);
                     print('Email is valid: ${_emailController.text}');
                   } else {
-                    // Show error message or prevent action
                     print('Please enter a valid email');
                   }
                 },

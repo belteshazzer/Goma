@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:goma_notify/screens/add_vehicle/widgets/input_form.dart';
-import '../vehicle_data.dart';
+import '../vehicle_model.dart';
 
 class VehicleDetailsCard extends StatelessWidget {
   final Vehicle vehicle;

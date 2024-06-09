@@ -5,10 +5,13 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../utils/helpers/helper_functions.dart';
 import '../../../api_path.dart';
-import '../../../user_account/account.dart';
+import 'get_vehicle.dart';
+import 'package:goma/Screen/add_vehicle/add_vehicle.dart';
+import 'package:goma/Screen/home/home.dart';
 
 class LoginController {
   static Future<Map<String, dynamic>> login(BuildContext context, String username, String password) async {
+
     final TextEditingController usernameController = TextEditingController(text: username);
     final TextEditingController passwordController = TextEditingController(text: password);
     late SharedPreferences prefs;
@@ -37,7 +40,7 @@ class LoginController {
       );
 
       if (response.statusCode == 200) {
-        // Login successful
+
         final Map<String, dynamic> responseData = json.decode(response.body);
         final String accessToken = responseData['access'];
         final String refreshToken = responseData['refresh'];
@@ -54,17 +57,21 @@ class LoginController {
 
         if (userResponse.statusCode == 200) {
           final userData = json.decode(userResponse.body);
-          final int ownerId = userData['id'];
+          final String ownerId = userData['id'];
 
           // Store owner ID in SharedPreferences
-          prefs.setInt('ownerId', ownerId);
+          prefs.setString('ownerId', ownerId);
 
           setState(false, '');
           
-          THelperFunctions.navigateToScreen(
-            context,
-            BottomNavBar(),
-          );
+          final vehicles = await GetVehicle.getVehiclesByOwnerId(ownerId);
+
+          if (vehicles == null || vehicles.isEmpty) {
+            THelperFunctions.navigateToScreen(context, const AddVehicleScreen());
+          } else {
+            THelperFunctions.navigateToScreen(context, const BottomNavBar());
+          }
+
         } else {
           setState(false, 'Failed to fetch user data.');
         }
