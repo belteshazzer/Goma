@@ -92,6 +92,7 @@ flutter:
 
   assets:
     - assets/logos/
+    - assets/logos/splash_screen.png
     - assets/icons/brands/
     - assets/images/content/
     - assets/images/banners/

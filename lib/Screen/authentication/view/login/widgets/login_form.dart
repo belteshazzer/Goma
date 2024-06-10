@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:goma/Screen/authentication/view/signUp/companyRegistrationPage/companyRegistration.dart';
 import 'package:iconsax/iconsax.dart';
-
 import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/text_strings.dart';
 import '../../../../../utils/helpers/helper_functions.dart';
@@ -27,18 +24,22 @@ class _TLoginFormState extends State<TLoginForm> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
   String _errorMessage = '';
-  bool _isPasswordVisible = false; // Added variable to track password visibility
+  bool _isPasswordVisible =
+      false; // Added variable to track password visibility
 
-  final _formKey = GlobalKey<FormState>(); 
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButtonTheme(
-      data: THelperFunctions.isDarkMode(context) ? TElevatedButtonTheme.darkElevatedButtonTheme : TElevatedButtonTheme.lightElevatedButtonTheme,
+      data: THelperFunctions.isDarkMode(context)
+          ? TElevatedButtonTheme.darkElevatedButtonTheme
+          : TElevatedButtonTheme.lightElevatedButtonTheme,
       child: Form(
-        key: _formKey, 
+        key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: TSizes.spaceBtwSections),
+          padding:
+              const EdgeInsets.symmetric(vertical: TSizes.spaceBtwSections),
           child: Center(
             child: Column(
               children: [
@@ -52,8 +53,8 @@ class _TLoginFormState extends State<TLoginForm> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
-                    }
-                    else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                    } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                        .hasMatch(value)) {
                       return 'Please enter a valid email address';
                     }
                     return null;
@@ -66,15 +67,19 @@ class _TLoginFormState extends State<TLoginForm> {
                 /// Password
                 TextFormField(
                   controller: _passwordController,
-                  obscureText: !_isPasswordVisible, // Toggle visibility based on state
+                  obscureText:
+                      !_isPasswordVisible, // Toggle visibility based on state
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Iconsax.password_check),
                     labelText: TTexts.password,
                     suffixIcon: IconButton(
-                      icon: Icon(_isPasswordVisible ? Iconsax.eye : Iconsax.eye_slash), // Change icon based on state
+                      icon: Icon(_isPasswordVisible
+                          ? Iconsax.eye
+                          : Iconsax.eye_slash), // Change icon based on state
                       onPressed: () {
                         setState(() {
-                          _isPasswordVisible = !_isPasswordVisible; // Toggle visibility state
+                          _isPasswordVisible =
+                              !_isPasswordVisible; // Toggle visibility state
                         });
                       },
                     ),
@@ -106,10 +111,10 @@ class _TLoginFormState extends State<TLoginForm> {
 
                     ///Forgot Password
                     TextButton(
-                      onPressed: () => THelperFunctions.navigateToScreen(context, const EmailPage()),
+                      onPressed: () => THelperFunctions.navigateToScreen(
+                          context, const EmailPage()),
                       child: const Text(TTexts.forgetPassword),
                     ),
-                    
                   ],
                 ),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
@@ -117,14 +122,29 @@ class _TLoginFormState extends State<TLoginForm> {
                 // sign in Button
                 SizedBox(
                   width: double.infinity,
-                  
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _login(context);
                       }
                     },
-                    child: _isLoading ? const CircularProgressIndicator() : const Text('Login'),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: THelperFunctions.isDarkMode(context)
+                          ? TElevatedButtonTheme
+                              .darkElevatedButtonTheme.style?.backgroundColor
+                              ?.resolve({})
+                          : TElevatedButtonTheme
+                              .lightElevatedButtonTheme.style?.backgroundColor
+                              ?.resolve({}),
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            8), // Set the desired border radius here
+                      ),
+                    ),
+                    child: _isLoading
+                        ? const CircularProgressIndicator()
+                        : const Text('Login'),
                   ),
                 ),
 
@@ -137,9 +157,24 @@ class _TLoginFormState extends State<TLoginForm> {
                 const SizedBox(height: TSizes.spaceBtwItems),
                 SizedBox(
                   width: double.infinity,
-                  child: OutlinedButton(
-                    onPressed: () => THelperFunctions.navigateToScreen(context, ChooseUserType()),
-                    child: const Text(TTexts.createAccount),
+                  child: ElevatedButton(
+                    onPressed: () => THelperFunctions.navigateToScreen(
+                        context, ChooseUserType()),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: THelperFunctions.isDarkMode(context)
+                          ? TElevatedButtonTheme
+                              .darkElevatedButtonTheme.style?.backgroundColor
+                              ?.resolve({})
+                          : TElevatedButtonTheme
+                              .lightElevatedButtonTheme.style?.backgroundColor
+                              ?.resolve({}),
+                      // backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            8), // Set the desired border radius here
+                      ),
+                    ),
+                    child: const Text(TTexts.createAccount, style: TextStyle(color: Colors.white),),
                   ),
                 ),
 

@@ -29,10 +29,9 @@ class TElevatedButtonTheme {
     style: ElevatedButton.styleFrom(
       elevation: 0,
       foregroundColor: TColors.light,
-      backgroundColor: TColors.primary,
+      backgroundColor: TColors.dark,
       disabledForegroundColor: TColors.darkGrey,
       disabledBackgroundColor: TColors.darkerGrey,
-      side: const BorderSide(color: TColors.primary),
       padding: const EdgeInsets.symmetric(vertical: TSizes.buttonHeight),
       textStyle: const TextStyle(fontSize: 16, color: TColors.textWhite, fontWeight: FontWeight.w400, fontFamily:'Poppins'),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TSizes.buttonRadius)),

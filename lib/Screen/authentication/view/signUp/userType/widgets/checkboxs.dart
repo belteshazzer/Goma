@@ -4,7 +4,6 @@ import '../../../../models/user_type_model.dart';
 import '../../I_RegistrationForm/IndividualRegistration.dart';
 import '../../companyRegistrationPage/companyRegistration.dart';
 
-
 class CheckBoxes extends StatefulWidget {
   const CheckBoxes({super.key});
 
@@ -40,48 +39,61 @@ class _CheckBoxesState extends State<CheckBoxes> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    userTypeModel.isIndividual = true;
-                    userTypeModel.isCompany = false;
-                  });
-                  _navigateToRegistrationForm(context, true);
-                },
-                child: const Text(
-                  'Individual',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.blue, // Customize the color as needed
+              Container(
+                decoration: BoxDecoration(
+                  color: userTypeModel.isIndividual ? Colors.white : Colors.transparent,
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    setState(() {
+                      userTypeModel.isIndividual = true;
+                      userTypeModel.isCompany = false;
+                    });
+                    _navigateToRegistrationForm(context, true);
+                  },
+                  child: const Text(
+                    'Individual',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white, // Customize the color as needed
+                    ),
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    userTypeModel.isCompany = true;
-                    userTypeModel.isIndividual = false;
-                  });
-                  _navigateToRegistrationForm(context, false);
-                },
-                child: const Text(
-                  'Company',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.blue, // Customize the color as needed
+              Container(
+                decoration: BoxDecoration(
+                  color: userTypeModel.isCompany ? Colors.white : Colors.transparent,
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    setState(() {
+                      userTypeModel.isCompany = true;
+                      userTypeModel.isIndividual = false;
+                    });
+                    _navigateToRegistrationForm(context, false);
+                  },
+                  child: const Text(
+                    'Company',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white, // Customize the color as needed
+                    ),
                   ),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 4 * TSizes.spaceBtwInputFields),
-       
         ],
       ),
     );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../../utils/constants/image_strings.dart';
 import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/text_strings.dart';
-
+import '../../../../../utils/theme/widget_themes/text_theme.dart';
 
 class TLoginHeader extends StatelessWidget {
   const TLoginHeader({
@@ -14,13 +14,16 @@ class TLoginHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    final isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final textTheme =
+        isDarkMode ? TTextTheme.darkTextTheme : TTextTheme.lightTextTheme;
+    return Center(
+      child:  Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Image(
-            height: 150,
-            image: AssetImage(
-                dark ? TImages.lightAppLogo : TImages.darkAppLogo)),
+        Text('G-Notify', style: textTheme.headlineLarge),
         Text(
           TTexts.loginTitle,
           style: Theme.of(context).textTheme.headlineMedium,
@@ -33,6 +36,6 @@ class TLoginHeader extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyMedium,
         )
       ],
-    );
+    ));
   }
 }

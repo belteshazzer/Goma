@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goma/utils/constants/text_strings.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../../../utils/theme/widget_themes/text_theme.dart';
@@ -29,17 +30,16 @@ class LandingPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  const LogoWidget(),
                   const SizedBox(height: 20),
-                  Text('Goma Notify', style: textTheme.headlineLarge),
+                  Text('G-Notify', style: textTheme.headlineLarge),
                   const SizedBox(height: TSizes.spaceBtwInputFields),
-                  Text(
-                    'Lorem ipsum sit amet dolor consectetur. Lorem ipsum sit amet dolor consectetur.',
-                    style: textTheme.bodySmall,
+                  const Text(
+                    'Goma Notify System revolutionizes Ethiopia\'s automotive sector by simplifying vehicle service renewals.',
+                    style: TextStyle(fontSize: 14.4),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: TSizes.spaceBtwSections),
-                  const TransitionButton(destination: ChooseUserType(), lable: 'create account'),
+                  const TransitionButton(destination: ChooseUserType(), label: 'create account'),
                   const SizedBox(height: TSizes.spaceBtwInputFields),
                   const LogInBtnWidget(),
                 ],

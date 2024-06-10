@@ -12,16 +12,28 @@ class LoginScreen extends StatelessWidget {
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: Padding(
-            padding: const EdgeInsets.all(30.0), 
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TLoginHeader(dark: dark),
-
-                TLoginForm(dark: dark)
-              ],
-            )),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height,
+          ),
+          child: IntrinsicHeight(
+            child: Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Expanded(child: SizedBox()), // Spacer to push content to the center
+                    TLoginHeader(dark: dark),
+                    TLoginForm(dark: dark),
+                    const Expanded(child: SizedBox()), // Spacer to push content to the center
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

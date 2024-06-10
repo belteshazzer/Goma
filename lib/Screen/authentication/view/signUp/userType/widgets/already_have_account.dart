@@ -15,7 +15,7 @@ class HaveAccount extends StatelessWidget {
       children:<Widget> [
         Text('Already have an Account?', 
           style:THelperFunctions.isDarkMode(context)? TTextTheme.darkTextTheme.bodyMedium:TTextTheme.lightTextTheme.bodyMedium,), 
-          TextButton(onPressed:()=>THelperFunctions.navigateToScreen(context,const LoginScreen()), child:const Text('Login', style: TextStyle(color: TColors.primary, fontFamily: 'Poppins', fontSize: TSizes.fontSizeSm),)),
+          TextButton(onPressed:()=>THelperFunctions.navigateToScreen(context,const LoginScreen()), child: const Text('Login', style: const TextStyle(color: TColors.white, fontFamily: 'Poppins', fontSize: TSizes.fontSizeSm),)),
       ],
     );
   }

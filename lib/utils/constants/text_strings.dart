@@ -2,6 +2,8 @@
 /// This class contains all the App Text in String formats.
 class TTexts {
 
+  static const String logoTitle = "G-NOTIFY";
+
   // -- GLOBAL Texts
   static const String and = "and";
   static const String skip = "Skip";
@@ -47,7 +49,7 @@ class TTexts {
 
   // -- Authentication Headings
   static const String loginTitle = "Welcome back,";
-  static const String loginSubTitle = "Discover Limitless Choices and Unmatched Convenience.";
+  static const String loginSubTitle = "Vehicle renewal ensures road safety and longevity.";
   static const String signupTitle = "Let’s create your account";
   static const String forgetPasswordTitle = "Forget password";
   static const String forgetPasswordSubTitle = "Don’t worry sometimes people can forget too, enter your email and we will send you a password reset link.";
@@ -58,7 +60,7 @@ class TTexts {
   static const String emailNotReceivedMessage = "Didn’t get the email? Check your junk/spam or resend it.";
   static const String yourAccountCreatedTitle = "Your account successfully created!";
   static const String yourAccountCreatedSubTitle = "Welcome to Your Ultimate Shopping Destination: Your Account is Created, Unleash the Joy of Seamless Online Shopping!";
-
+static const String userTypeSubTitle = "choose your user type.";
 
   // -- Product
   static const String popularProducts = "Popular Products";
