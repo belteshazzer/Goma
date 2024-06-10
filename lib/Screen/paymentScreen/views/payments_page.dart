@@ -21,9 +21,9 @@ class PaymentsPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget> [
-            const PaymentTypeCards(title:insurance , description: insuranceDesc),
-            const PaymentTypeCards(title:insurance , description: insuranceDesc),
-            const PaymentTypeCards(title:insurance , description: insuranceDesc),
+            const PaymentTypeCards("t",title:insurance , description: insuranceDesc),
+            const PaymentTypeCards("t",title:insurance , description: insuranceDesc),
+            const PaymentTypeCards("t",title:insurance , description: insuranceDesc),
             ClipPath(
               clipper: CurvedClipper(),
               child: Container(

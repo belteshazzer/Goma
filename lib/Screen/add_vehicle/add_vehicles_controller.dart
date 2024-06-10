@@ -23,7 +23,7 @@ class ApiService {
 
     final response = await http.post(url, headers: headers, body: body);
 
-    print("response ${response.body.toString()}");
+    print("response ${response.body.toString()} ${response.statusCode}");
 
     if (response.statusCode == 200) {
       return {'status': 'success'};

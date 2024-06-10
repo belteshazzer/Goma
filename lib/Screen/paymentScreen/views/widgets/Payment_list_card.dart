@@ -6,7 +6,7 @@ class PaymentTypeCards extends StatelessWidget {
   final String title;
   final String description;
 
-  const PaymentTypeCards({super.key, required this.title, required this.description});
+  const PaymentTypeCards(String s, {super.key, required this.title, required this.description});
   
   @override
   Widget build(BuildContext context) {

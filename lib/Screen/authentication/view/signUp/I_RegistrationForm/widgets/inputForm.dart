@@ -80,7 +80,7 @@ class _InputFieldsState extends State<InputFields> {
                           : TTextTheme.lightTextTheme.headlineMedium,
                     ),
                     const SizedBox(height: TSizes.spaceBtwInputFields),
-                    for (int i = 0; i < _controllers.length; i++)
+                    for (int i = 0; i < _controllers.length-1; i++)
                       TextFieldWidget(
                         controller: _controllers[i],
                         labelText: _labelTexts[i],

@@ -27,122 +27,131 @@ class _TLoginFormState extends State<TLoginForm> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
   String _errorMessage = '';
+  bool _isPasswordVisible = false; // Added variable to track password visibility
 
   final _formKey = GlobalKey<FormState>(); 
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButtonTheme(data: THelperFunctions.isDarkMode(context)? TElevatedButtonTheme.darkElevatedButtonTheme:TElevatedButtonTheme.lightElevatedButtonTheme,
-    child: Form(
-      key: _formKey, 
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: TSizes.spaceBtwSections),
-        child: Center(
-          child: Column(
-            children: [
-              /// Email
-              TextFormField(
-                controller: _usernameController,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Iconsax.direct_right),
-                  labelText: TTexts.email,
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                    return 'Please enter a valid email address';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(
-                height: TSizes.spaceBtwInputFields,
-              ),
-
-              /// Password
-              TextFormField(
-                controller: _passwordController,
-                obscureText: true, // Hide password text
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Iconsax.password_check),
-                  labelText: TTexts.password,
-                  suffixIcon: Icon(Iconsax.eye_slash),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  // You can add more specific validation rules here if needed
-                  return null;
-                },
-              ),
-
-              const SizedBox(
-                height: TSizes.spaceBtwInputFields / 2,
-              ),
-
-              /// Remember me and Forget Password
-              Row(
-                children: [
-                  ///Remember me
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Checkbox(value: true, onChanged: (value) {}),
-                      const Text(TTexts.rememberMe),
-                    ],
+    return ElevatedButtonTheme(
+      data: THelperFunctions.isDarkMode(context) ? TElevatedButtonTheme.darkElevatedButtonTheme : TElevatedButtonTheme.lightElevatedButtonTheme,
+      child: Form(
+        key: _formKey, 
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: TSizes.spaceBtwSections),
+          child: Center(
+            child: Column(
+              children: [
+                /// Email
+                TextFormField(
+                  controller: _usernameController,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Iconsax.direct_right),
+                    labelText: TTexts.email,
                   ),
-
-                  ///Forgot Password
-                  TextButton(
-                    onPressed: () => THelperFunctions.navigateToScreen(context, const EmailPage()),
-                    child: const Text(TTexts.forgetPassword),
-                  ),
-                 
-                ],
-              ),
-              const SizedBox(height: TSizes.spaceBtwInputFields),
-
-              // sign in Button
-              SizedBox(
-                width: double.infinity,
-                
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _login(context);
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
                     }
+                    else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                      return 'Please enter a valid email address';
+                    }
+                    return null;
                   },
-                  child: _isLoading ? const CircularProgressIndicator() : const Text('Login'),
                 ),
-              ),
-
-              if (_errorMessage.isNotEmpty)
-                Text(
-                  _errorMessage,
-                  style: const TextStyle(color: Colors.red),
+                const SizedBox(
+                  height: TSizes.spaceBtwInputFields,
                 ),
 
-              const SizedBox(height: TSizes.spaceBtwItems),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () => THelperFunctions.navigateToScreen(context,ChooseUserType()),
-                  child: const Text(TTexts.createAccount),
+                /// Password
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: !_isPasswordVisible, // Toggle visibility based on state
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Iconsax.password_check),
+                    labelText: TTexts.password,
+                    suffixIcon: IconButton(
+                      icon: Icon(_isPasswordVisible ? Iconsax.eye : Iconsax.eye_slash), // Change icon based on state
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible; // Toggle visibility state
+                        });
+                      },
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    // You can add more specific validation rules here if needed
+                    return null;
+                  },
                 ),
-              ),
 
-              const SizedBox(
-                height: TSizes.defaultSpace,
-              ),
-            ],
+                const SizedBox(
+                  height: TSizes.spaceBtwInputFields / 2,
+                ),
+
+                /// Remember me and Forget Password
+                Row(
+                  children: [
+                    ///Remember me
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Checkbox(value: true, onChanged: (value) {}),
+                        const Text(TTexts.rememberMe),
+                      ],
+                    ),
+
+                    ///Forgot Password
+                    TextButton(
+                      onPressed: () => THelperFunctions.navigateToScreen(context, const EmailPage()),
+                      child: const Text(TTexts.forgetPassword),
+                    ),
+                    
+                  ],
+                ),
+                const SizedBox(height: TSizes.spaceBtwInputFields),
+
+                // sign in Button
+                SizedBox(
+                  width: double.infinity,
+                  
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _login(context);
+                      }
+                    },
+                    child: _isLoading ? const CircularProgressIndicator() : const Text('Login'),
+                  ),
+                ),
+
+                if (_errorMessage.isNotEmpty)
+                  Text(
+                    _errorMessage,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+
+                const SizedBox(height: TSizes.spaceBtwItems),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () => THelperFunctions.navigateToScreen(context, ChooseUserType()),
+                    child: const Text(TTexts.createAccount),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: TSizes.defaultSpace,
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    )
-  );
+    );
   }
 
   void _login(BuildContext context) async {

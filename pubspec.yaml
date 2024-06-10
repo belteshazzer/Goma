@@ -67,6 +67,7 @@ dependencies:
   phone_form_field: ^9.2.5
   shimmer: ^3.0.0
   flutter_local_notifications: ^17.1.2
+  awesome_notifications: ^0.9.3+1
 
 
 

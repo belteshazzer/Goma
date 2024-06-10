@@ -26,7 +26,7 @@ class IndividualRegistrationController {
         body: json.encode(userData.toJson()),
         headers: {'Content-Type': 'application/json'},
       );
-
+      print(response);
       if (response.statusCode == 201) {
         print('User created successfully');
         print(response.body);
