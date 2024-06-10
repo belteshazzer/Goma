@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goma/Screen/home/home.dart';
+import 'package:goma/common/bar/bar.dart';
 import 'package:iconsax/iconsax.dart';
 import '../add_vehicles_controller.dart';
 import '../../../utils/constants/sizes.dart';
@@ -88,10 +89,10 @@ class _InputFormState extends State<InputForm> {
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      final chassisNumber = chassisNoController.text;
+      final chassisNumber = int.parse(chassisNoController.text);
       final insuranceCompanyName = insuranceCompanyController.text;
-      final plateNumber = plateNumberController.text;
-
+      final plateNumber = int.parse(plateNumberController.text);
+      print("user token ${_userToken}");
       final result = await apiService.addVehicle(
         chassisNumber: chassisNumber,
         insuranceCompanyName: insuranceCompanyName,
@@ -134,7 +135,7 @@ class _InputFormState extends State<InputForm> {
               child: const Text('No, Skip'),
               onPressed: () {
                 Navigator.of(context).pop(); 
-                Get.to(() => const HomePage()); 
+                Get.to(() => const BottomNavBar()); 
               },
             ),
             TextButton(

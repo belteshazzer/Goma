@@ -5,15 +5,15 @@ import 'package:http/http.dart' as http;
 class ApiService {
 
   Future<Map<String, dynamic>> addVehicle({
-    required String chassisNumber,
+    required int chassisNumber,
     required String insuranceCompanyName,
-    required String plateNumber,
+    required int plateNumber,
     required String token,
   }) async {
-    final url = Uri.parse('$AuthenticationUrl/add_vehicle/');
+    final url = Uri.parse('$AuthenticationUrl/vehicles/add_vehicle/');
     final headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer $token',
+      'Authorization': 'JWT $token',
     };
     final body = jsonEncode({
       'chassis_number': chassisNumber,
@@ -22,6 +22,8 @@ class ApiService {
     });
 
     final response = await http.post(url, headers: headers, body: body);
+
+    print("response ${response.body.toString()}");
 
     if (response.statusCode == 200) {
       return {'status': 'success'};

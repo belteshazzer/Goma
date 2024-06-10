@@ -15,11 +15,22 @@ class AddVehicleHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image(
-            height: 250,
-            image: AssetImage(
-                dark ? TImages.lightAppLogo : TImages.darkAppLogo)),
+        Container(
+          
+          height: 150,
+          
+          child: const Text(
+            'G-NOTIFY',
+            style: TextStyle(
+              fontSize: TSizes.xl,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'YourFontFamily',
+            ),
+          ),
+          ),
+        
         Text(
           TTexts.addVehicleTitle,
           style: Theme.of(context).textTheme.headlineMedium,

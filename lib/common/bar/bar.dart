@@ -3,6 +3,8 @@ import 'package:goma/Screen/home/home.dart';
 import 'package:goma/Screen/notification/notification.dart';
 import 'package:goma/common/bar/widget/bottomNavBar.dart';
 
+import '../../Screen/vehicle/vehicle_page.dart';
+
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
 
@@ -16,12 +18,7 @@ class _BottomNavigationBar_OutputState extends State<BottomNavBar> {
   final screens = [
     const HomePage(),
     const NotificationListPage(),
-    const Center(
-      child: Text(
-        'Vehicle',
-        style: TextStyle(fontSize: 24),
-      ),
-    ),
+    const VehicleListPage()
   ];
 
   void onTabTapped(int index) {

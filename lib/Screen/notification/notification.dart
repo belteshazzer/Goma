@@ -1,20 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:animated_list_plus/animated_list_plus.dart';
 import 'package:animated_list_plus/transitions.dart';
+import 'package:goma/Screen/vehicle/vehicle_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class Notification {
-  final String title;
-  final String description;
-  final String date;
-  bool isRead;
-
-  Notification({
-    required this.title,
-    required this.description,
-    required this.date,
-    this.isRead = false,
-  });
-}
+import '../authentication/controllers/SignInController/get_vehicle.dart';
 
 class NotificationListPage extends StatefulWidget {
   const NotificationListPage({super.key});
@@ -24,25 +16,112 @@ class NotificationListPage extends StatefulWidget {
 }
 
 class _NotificationListPageState extends State<NotificationListPage> {
-  final List<Notification> _notifications = [
-    Notification(
-      title: "Insurance Payment",
-      description: "Your insurance payment is due.",
-      date: "2024-06-07",
-    ),
-    Notification(
-      title: "Road Fund Payment",
-      description: "Your road fund payment is due.",
-      date: "2024-06-08",
-    ),
-    Notification(
-      title: "Car Renewal Payment",
-      description: "Your car renewal payment is due.",
-      date: "2024-06-09",
-    ),
-  ];
+  List<Vehicle> vehicles = [];
+  List<Notification> _notifications = [];
+  String _userToken = '';
+  String _ownerId = '';
+  bool _isLoading = true;
+  String? _error;
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeNotifications();
+    _loadUserData();
+  }
+
+  Future<void> _initializeNotifications() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    final InitializationSettings initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  Future<void> _showNotification(
+      int id, String title, String body) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+            'vehicle_notifications', // channel id
+            'Vehicle Notifications', // channel name
+           channelDescription:  'Notifications related to vehicle documents and renewals', // channel description
+            importance: Importance.max,
+            priority: Priority.high,
+            ticker: 'ticker');
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+        id, title, body, platformChannelSpecifics);
+  }
+
+  Future<void> _loadUserData() async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      _userToken = prefs.getString('accessToken') ?? '';
+      _ownerId = prefs.getString('ownerId') ?? '';
+
+      List<Vehicle>? fetchedVehicles =
+          await GetVehicle.getVehiclesByOwnerId(_ownerId, _userToken);
+      if (fetchedVehicles != null) {
+        setState(() {
+          vehicles = fetchedVehicles;
+        });
+        _loadDocumentsForVehicles();
+      } else {
+        setState(() {
+          _error = 'Failed to load vehicles';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _loadDocumentsForVehicles() async {
+    for (var vehicle in vehicles) {
+      // Load documents for each vehicle here and create notifications
+      // Dummy data for illustration
+      _notifications.addAll([
+        Notification(
+          title: 'Insurance Renewal',
+          description: 'Your insurance needs to be renewed.',
+          date: '2024-06-25',
+        ),
+        Notification(
+          title: 'Road Tax Renewal',
+          description: 'Your road tax needs to be renewed.',
+          date: '2024-07-05',
+        ),
+      ]);
+    }
+    _checkNotificationDueDates();
+  }
+
+  void _checkNotificationDueDates() {
+    DateTime now = DateTime.now();
+    for (var notification in _notifications) {
+      DateTime dueDate = DateTime.parse(notification.date);
+      int daysLeft = dueDate.difference(now).inDays;
+
+      if (daysLeft == 15 || daysLeft == 7 || daysLeft == 3) {
+        _showNotification(
+          _notifications.indexOf(notification),
+          notification.title,
+          '${notification.description} You have $daysLeft days left.',
+        );
+      }
+    }
+  }
 
   void _markAllAsRead() {
     setState(() {
@@ -175,28 +254,50 @@ class _NotificationListPageState extends State<NotificationListPage> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ImplicitlyAnimatedList<Notification>(
-                  key: _listKey,
-                  items: _notifications,
-                  areItemsTheSame: (a, b) => a.title == b.title,
-                  itemBuilder: (context, animation, item, index) {
-                    return SizeFadeTransition(
-                      sizeFraction: 0.7,
-                      curve: Curves.easeInOut,
-                      animation: animation,
-                      child: _buildNotificationItem(item, index),
-                    );
-                  },
-                  removeItemBuilder: (context, animation, oldItem) {
-                    return SizeFadeTransition(
-                      sizeFraction: 0.7,
-                      curve: Curves.easeInOut,
-                      animation: animation,
-                      child: _buildNotificationItem(
-                          oldItem, _notifications.indexOf(oldItem)),
-                    );
-                  },
-                ),
+                child: _isLoading
+                    ? Shimmer.fromColors(
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
+                        child: ListView.builder(
+                          itemCount: 5,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Container(
+                                width: double.infinity,
+                                height: 20.0,
+                                color: Colors.white,
+                              ),
+                              subtitle: Container(
+                                width: double.infinity,
+                                height: 14.0,
+                                color: Colors.white,
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                    : ImplicitlyAnimatedList<Notification>(
+                        key: _listKey,
+                        items: _notifications,
+                        areItemsTheSame: (a, b) => a.title == b.title,
+                        itemBuilder: (context, animation, item, index) {
+                          return SizeFadeTransition(
+                            sizeFraction: 0.7,
+                            curve: Curves.easeInOut,
+                            animation: animation,
+                            child: _buildNotificationItem(item, index),
+                          );
+                        },
+                        removeItemBuilder: (context, animation, oldItem) {
+                          return SizeFadeTransition(
+                            sizeFraction: 0.7,
+                            curve: Curves.easeInOut,
+                            animation: animation,
+                            child: _buildNotificationItem(
+                                oldItem, _notifications.indexOf(oldItem)),
+                          );
+                        },
+                      ),
               ),
             ),
           ],
@@ -205,8 +306,6 @@ class _NotificationListPageState extends State<NotificationListPage> {
     );
   }
 }
-
-
 
 class PaymentPage extends StatelessWidget {
   final Notification notification;
@@ -280,4 +379,18 @@ class PaymentPage extends StatelessWidget {
       ),
     );
   }
+}
+
+class Notification {
+  String title;
+  String description;
+  String date;
+  bool isRead;
+
+  Notification({
+    required this.title,
+    required this.description,
+    required this.date,
+    this.isRead = false,
+  });
 }

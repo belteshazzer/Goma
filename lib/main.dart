@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:goma/Screen/start_pages/views/splash_screen/splashScreen.dart';
+import 'package:goma/common/bar/bar.dart';
 import 'Screen/add_vehicle/add_vehicle.dart';
 
 void main() {
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:const AddVehicleScreen(),
+      home:const SplashScreen(),
       
     );
   }

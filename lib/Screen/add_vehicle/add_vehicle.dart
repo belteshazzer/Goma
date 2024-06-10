@@ -11,6 +11,7 @@ class AddVehicleScreen extends StatelessWidget {
     final dark = THelperFunctions.isDarkMode(context);
 
     return Scaffold(
+      appBar: AppBar(),
       body: SingleChildScrollView(
         child: Padding(
             // padding: TSpacingStyle.paddingWithAppBarHeight,

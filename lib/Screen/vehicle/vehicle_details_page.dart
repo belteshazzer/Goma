@@ -1,14 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:goma/Screen/vehicle/widgets/vehicle_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/constants/colors.dart';
-import 'vehicle_model.dart';
-import 'widgets/vehicle_card.dart';
+import '../api_path.dart';
+import 'vehicle_model.dart'; // Make sure this is the correct path
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class VehicleDetailsPage extends StatelessWidget {
+class VehicleDetail extends StatefulWidget {
   final Vehicle vehicle;
 
-  const VehicleDetailsPage({super.key, 
-    required this.vehicle,
-  });
+  const VehicleDetail({Key? key, required this.vehicle}) : super(key: key);
+
+  @override
+  State<VehicleDetail> createState() => _VehicleDetailState();
+}
+
+class _VehicleDetailState extends State<VehicleDetail> {
+  String _userToken = "";
+  List<Map<String, dynamic>> documents = [];
+  
+
+  @override
+  void initState() {
+    super.initState();
+    loadDocs();
+  }
+
+  Future<void> loadDocs() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    _userToken = pref.getString('accessToken') ?? '';
+
+    final uri = Uri.parse("$AuthenticationUrl/documents/vehicle/${widget.vehicle.id}/");
+
+    try {
+      final response = await http.get(uri, headers: {"Authorization": "JWT $_userToken"});
+
+      if (response.statusCode == 200) {
+        print('Response: ${response.body}');
+        if (response.body.isNotEmpty) {
+          final List<dynamic> jsonBody = json.decode(response.body);
+          print('JSON Body: $jsonBody');
+          setState(() {
+            documents = List<Map<String, dynamic>>.from(jsonBody);
+          });
+        } else {
+          print('No documents found');
+        }
+      } else {
+        print('Failed to load documents. Status Code: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error fetching documents: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +76,7 @@ class VehicleDetailsPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Vehicle Details Card
-                VehicleDetailsCard(vehicle: vehicle, darkColor: darkColor, textColor: textColor),
+                VehicleDetailsCard(vehicle: widget.vehicle, darkColor: darkColor, textColor: textColor),
                 const SizedBox(height: 20.0),
                 // Documents to Renew Card
                 Card(
@@ -111,74 +156,30 @@ class VehicleDetailsPage extends StatelessWidget {
             ),
           ],
         ),
-        TableRow(
-          children: [
-            TableCell(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Insurance', style: TextStyle(color: textColor)),
+        for (var doc in documents)
+          TableRow(
+            children: [
+              TableCell(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(doc['document_type'], style: TextStyle(color: textColor)),
+                ),
               ),
-            ),
-            TableCell(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('21-03-23', style: TextStyle(color: textColor)),
+              TableCell(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(doc['expiry_date'], style: TextStyle(color: textColor)),
+                ),
               ),
-            ),
-            TableCell(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Up to Date', style: TextStyle(color: textColor)),
+              TableCell(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(doc['renewal_status'] ? 'Up to Date' : 'Pending', style: TextStyle(color: textColor)),
+                ),
               ),
-            ),
-          ],
-        ),
-        TableRow(
-          children: [
-            TableCell(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Road Tax', style: TextStyle(color: textColor)),
-              ),
-            ),
-            TableCell(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('21-05-30', style: TextStyle(color: textColor)),
-              ),
-            ),
-            TableCell(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Pending', style: TextStyle(color: textColor)),
-              ),
-            ),
-          ],
-        ),
-        TableRow(
-          children: [
-            TableCell(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('EDVLCA', style: TextStyle(color: textColor)),
-              ),
-            ),
-            TableCell(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('21-06-15', style: TextStyle(color: textColor)),
-              ),
-            ),
-            TableCell(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Overdue', style: TextStyle(color: textColor)),
-              ),
-            ),
-          ],
-        ),
+            ],
+          ),
       ],
     );
   }
 }
-

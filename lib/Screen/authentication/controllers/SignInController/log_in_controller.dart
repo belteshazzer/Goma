@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:goma/Screen/vehicle/vehicle_model.dart';
 import 'package:goma/common/bar/bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -66,9 +67,9 @@ class LoginController {
 
           setState(false, '');
 
-          //Todo: 
-          
-          final vehicles = await GetVehicle.getVehiclesByOwnerId(ownerId);
+          // Fetch vehicles
+          List<Vehicle>? vehicles = await GetVehicle.getVehiclesByOwnerId(ownerId, accessToken);
+          print("vehicles ${vehicles}");
 
           if (vehicles == null || vehicles.isEmpty) {
             THelperFunctions.navigateToScreen(context, const AddVehicleScreen());
