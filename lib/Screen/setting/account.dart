@@ -1,4 +1,8 @@
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:goma/Screen/notification/notification.dart';
+import 'package:goma/Screen/start_pages/views/splash_screen/splashScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'widget/profile/profileScreen.dart';
 
@@ -47,7 +51,7 @@ class _SettingsPage2State extends State<SettingsPage2> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const NotificationsPage(),
+                            builder: (context) => const NotificationListPage(),
                           ),
                         );
                       },
@@ -114,11 +118,13 @@ class _SettingsPage2State extends State<SettingsPage2> {
                     _CustomListTile(
                       title: "Sign out",
                       icon: Icons.exit_to_app_rounded,
-                      onTap: () {
+                      onTap: () async {
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        await prefs.clear();
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const SignOutPage(),
+                            builder: (context) => const SplashScreen(),
                           ),
                         );
                       },
@@ -191,24 +197,6 @@ class _SingleSection extends StatelessWidget {
   }
 }
 
-// Placeholder pages for navigation targets
-class NotificationsPage extends StatelessWidget {
-  const NotificationsPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Notifications"),
-      ),
-      body: const Center(
-        child: Text("Notifications Page"),
-      ),
-    );
-  }
-}
-
-
 class CalendarPage extends StatelessWidget {
   const CalendarPage({Key? key}) : super(key: key);
 
@@ -218,8 +206,20 @@ class CalendarPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Calendar"),
       ),
-      body: const Center(
-        child: Text("Calendar Page"),
+      body: Center(
+        child: CalendarDatePicker2(
+          config: CalendarDatePicker2Config(
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2100),
+            currentDate: DateTime.now(),
+            calendarType: CalendarDatePicker2Type.single,
+          ),
+          value: [DateTime.now()],
+          onValueChanged: (dates) {
+            // Handle date changes here
+            print(dates);
+          },
+        ),
       ),
     );
   }
@@ -257,18 +257,3 @@ class AboutPage extends StatelessWidget {
   }
 }
 
-class SignOutPage extends StatelessWidget {
-  const SignOutPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Sign Out"),
-      ),
-      body: const Center(
-        child: Text("Sign Out Page"),
-      ),
-    );
-  }
-}
