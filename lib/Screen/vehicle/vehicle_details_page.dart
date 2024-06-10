@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Import intl for date formatting
 import 'package:goma/Screen/vehicle/widgets/vehicle_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/constants/colors.dart';
@@ -19,7 +20,6 @@ class VehicleDetail extends StatefulWidget {
 class _VehicleDetailState extends State<VehicleDetail> {
   String _userToken = "";
   List<Map<String, dynamic>> documents = [];
-  
 
   @override
   void initState() {
@@ -52,6 +52,18 @@ class _VehicleDetailState extends State<VehicleDetail> {
       }
     } catch (error) {
       print('Error fetching documents: $error');
+    }
+  }
+
+  String calculateDaysLeft(String expiryDate) {
+    DateTime now = DateTime.now();
+    DateTime expiry = DateTime.parse(expiryDate);
+    Duration difference = expiry.difference(now);
+
+    if (difference.isNegative) {
+      return 'Expired';
+    } else {
+      return '${difference.inDays} days left';
     }
   }
 
@@ -174,7 +186,7 @@ class _VehicleDetailState extends State<VehicleDetail> {
               TableCell(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(doc['renewal_status'] ? 'Up to Date' : 'Pending', style: TextStyle(color: textColor)),
+                  child: Text(calculateDaysLeft(doc['expiry_date']), style: TextStyle(color: textColor)),
                 ),
               ),
             ],
