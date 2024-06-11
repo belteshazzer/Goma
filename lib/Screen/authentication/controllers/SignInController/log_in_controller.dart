@@ -85,7 +85,7 @@ class LoginController {
         setState(false, errorData['detail']);
       }
     } catch (error) {
-      setState(false, error.toString());
+      setState(false, "Server error. Please try again later.");
     }
 
     return {'isLoading': isLoading, 'errorMessage': errorMessage};

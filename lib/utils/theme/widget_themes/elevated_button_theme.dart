@@ -28,12 +28,12 @@ class TElevatedButtonTheme {
   static final darkElevatedButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       elevation: 0,
-      foregroundColor: TColors.light,
-      backgroundColor: TColors.dark,
+      foregroundColor: TColors.dark,
+      backgroundColor: TColors.light,
       disabledForegroundColor: TColors.darkGrey,
       disabledBackgroundColor: TColors.darkerGrey,
       padding: const EdgeInsets.symmetric(vertical: TSizes.buttonHeight),
-      textStyle: const TextStyle(fontSize: 16, color: TColors.textWhite, fontWeight: FontWeight.w400, fontFamily:'Poppins'),
+      textStyle: const TextStyle(fontSize: 16, color: TColors.dark, fontWeight: FontWeight.w400, fontFamily:'Poppins'),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TSizes.buttonRadius)),
       ).copyWith(
       minimumSize: WidgetStateProperty.all(const Size(double.infinity, TSizes.buttonHeight)),

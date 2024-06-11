@@ -16,17 +16,30 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
   @override
   void initState() {
     super.initState();
-    widget.phoneNumberController?.value=const PhoneNumber(isoCode: IsoCode.ET, nsn: '');
+    widget.phoneNumberController?.value = const PhoneNumber(isoCode: IsoCode.ET, nsn: '');
   }
+
   @override
   Widget build(BuildContext context) {
     return PhoneFormField(
       controller: widget.phoneNumberController,
       decoration: InputDecoration(
         labelText: 'Phone Number',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0), // Adjust the value to make it less curved
+          borderSide: BorderSide(color: borderColor),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0), // Adjust the value to make it less curved
+          borderSide: BorderSide(color: borderColor),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0), // Adjust the value to make it less curved
+          borderSide: BorderSide(color: Colors.blue),
+        ),
         suffixIcon: IconButton(
           icon: const Icon(Icons.close, color: Colors.grey, size: 18),
-          onPressed: () => widget.phoneNumberController?.value=const PhoneNumber(isoCode: IsoCode.ET, nsn: ''),
+          onPressed: () => widget.phoneNumberController?.value = const PhoneNumber(isoCode: IsoCode.ET, nsn: ''),
         ),
       ),
       onChanged: (value) {

@@ -6,16 +6,32 @@ import '../../../../../../utils/theme/widget_themes/text_theme.dart';
 import '../../../login/login.dart';
 
 class HaveAccount extends StatelessWidget {
-  const HaveAccount ({super.key});
+  const HaveAccount({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center, 
-      children:<Widget> [
-        Text('Already have an Account?', 
-          style:THelperFunctions.isDarkMode(context)? TTextTheme.darkTextTheme.bodyMedium:TTextTheme.lightTextTheme.bodyMedium,), 
-          TextButton(onPressed:()=>THelperFunctions.navigateToScreen(context,const LoginScreen()), child: const Text('Login', style: const TextStyle(color: TColors.white, fontFamily: 'Poppins', fontSize: TSizes.fontSizeSm),)),
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          'Already have an Account?',
+          style: THelperFunctions.isDarkMode(context)
+              ? TTextTheme.darkTextTheme.bodyMedium
+              : TTextTheme.lightTextTheme.bodyMedium,
+        ),
+        TextButton(
+            onPressed: () =>
+                THelperFunctions.navigateToScreen(context, const LoginScreen()),
+            child: Text(
+              'Login',
+              style: TextStyle(
+                  color: THelperFunctions.isDarkMode(context)
+                      ? TColors.white
+                      : TColors.dark,
+                  fontFamily: 'Poppins',
+                  fontSize: TSizes.fontSizeSm
+                  ,decoration: TextDecoration.underline),
+            )),
       ],
     );
   }

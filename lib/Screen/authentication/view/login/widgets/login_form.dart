@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:goma/Screen/start_pages/views/landing_page/widgets/login_btn_widget.dart';
+import 'package:goma/utils/constants/colors.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/text_strings.dart';
@@ -129,22 +131,18 @@ class _TLoginFormState extends State<TLoginForm> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: THelperFunctions.isDarkMode(context)
-                          ? TElevatedButtonTheme
-                              .darkElevatedButtonTheme.style?.backgroundColor
-                              ?.resolve({})
-                          : TElevatedButtonTheme
-                              .lightElevatedButtonTheme.style?.backgroundColor
-                              ?.resolve({}),
-                      backgroundColor: Colors.white,
+                    
+                      backgroundColor:THelperFunctions.isDarkMode(context) ? TColors.light : TColors.dark,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
-                            8), // Set the desired border radius here
+                            8), 
+                             // Set the desired border radius here
                       ),
+                      side: const BorderSide(color: Colors.grey),
                     ),
                     child: _isLoading
                         ? const CircularProgressIndicator()
-                        : const Text('Login'),
+                        :  Text('Login',style: TextStyle(color:THelperFunctions.isDarkMode(context) ? Colors.black: Colors.white),),
                   ),
                 ),
 
@@ -155,27 +153,9 @@ class _TLoginFormState extends State<TLoginForm> {
                   ),
 
                 const SizedBox(height: TSizes.spaceBtwItems),
-                SizedBox(
+                const SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => THelperFunctions.navigateToScreen(
-                        context, ChooseUserType()),
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: THelperFunctions.isDarkMode(context)
-                          ? TElevatedButtonTheme
-                              .darkElevatedButtonTheme.style?.backgroundColor
-                              ?.resolve({})
-                          : TElevatedButtonTheme
-                              .lightElevatedButtonTheme.style?.backgroundColor
-                              ?.resolve({}),
-                      // backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            8), // Set the desired border radius here
-                      ),
-                    ),
-                    child: const Text(TTexts.createAccount, style: TextStyle(color: Colors.white),),
-                  ),
+                  child: DarkBgButtonWidget(text: "Create Account",screen: ChooseUserType(),),
                 ),
 
                 const SizedBox(

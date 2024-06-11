@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
 import '../../../../../utils/constants/colors.dart';
-import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/helpers/helper_functions.dart';
-import '../../../../authentication/view/login/login.dart';
 
-class LogInBtnWidget extends StatelessWidget {
-  const LogInBtnWidget({super.key});
+class DarkBgButtonWidget extends StatelessWidget {
+  const DarkBgButtonWidget({super.key,this.screen, this.text});
+
+  final dynamic screen;
+  final  text;
+
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return ElevatedButton(
         onPressed: () =>
-            THelperFunctions.navigateToScreen(context, const LoginScreen()),
-        child: const Text('Log In',
-            style: TextStyle(
-                color: TColors.textWhite,
-                fontWeight: FontWeight.w300,
-                fontSize: TSizes.fontSizeMd,
-                fontFamily: 'poppins')));
+            THelperFunctions.navigateToScreen(context,screen),
+        style: ElevatedButton.styleFrom(
+
+          backgroundColor: THelperFunctions.isDarkMode(context)
+          ? TColors.black : TColors.light,
+          side: const BorderSide(color: TColors.grey)
+        ),
+        child:  Text(text,style:THelperFunctions.isDarkMode(context) ? const TextStyle(color: Colors.white):const TextStyle(color: Colors.black)),
+        
+        );
   }
 }

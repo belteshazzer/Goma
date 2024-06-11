@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goma/Screen/authentication/view/login/login.dart';
 import 'package:goma/utils/constants/text_strings.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/theme/theme.dart';
@@ -41,7 +42,7 @@ class LandingPage extends StatelessWidget {
                   const SizedBox(height: TSizes.spaceBtwSections),
                   const TransitionButton(destination: ChooseUserType(), label: 'create account'),
                   const SizedBox(height: TSizes.spaceBtwInputFields),
-                  const LogInBtnWidget(),
+                  const DarkBgButtonWidget(text: "Login",screen: LoginScreen(),),
                 ],
               ),
             ),

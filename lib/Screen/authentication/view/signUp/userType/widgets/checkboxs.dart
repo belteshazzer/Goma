@@ -1,99 +1,31 @@
 import 'package:flutter/material.dart';
-import '../../../../../../utils/constants/sizes.dart';
-import '../../../../models/user_type_model.dart';
-import '../../I_RegistrationForm/IndividualRegistration.dart';
-import '../../companyRegistrationPage/companyRegistration.dart';
+import 'package:goma/Screen/authentication/view/signUp/I_RegistrationForm/IndividualRegistration.dart';
+import 'package:goma/Screen/authentication/view/signUp/companyRegistrationPage/companyRegistration.dart';
+import 'package:goma/Screen/start_pages/views/landing_page/widgets/login_btn_widget.dart';
 
-class CheckBoxes extends StatefulWidget {
-  const CheckBoxes({super.key});
+class SelectUserType extends StatefulWidget {
+  const SelectUserType({super.key});
 
   @override
-  State<CheckBoxes> createState() => _CheckBoxesState();
+  State<SelectUserType> createState() => _SelectUserTypeState();
 }
 
-class _CheckBoxesState extends State<CheckBoxes> {
-  final UserTypeModel userTypeModel = UserTypeModel(isIndividual: false, isCompany: false);
-
-  void _navigateToRegistrationForm(BuildContext context, bool isIndividual) {
-    if (isIndividual) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => I_RegistrationForm()),
-      );
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => C_RegistrationForm()),
-      );
-    }
-  }
-
+class _SelectUserTypeState extends State<SelectUserType> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
+    return const Padding(
+      padding: EdgeInsets.all(16.0), // Adds padding around the Column
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  color: userTypeModel.isIndividual ? Colors.white : Colors.transparent,
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    setState(() {
-                      userTypeModel.isIndividual = true;
-                      userTypeModel.isCompany = false;
-                    });
-                    _navigateToRegistrationForm(context, true);
-                  },
-                  child: const Text(
-                    'Individual',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white, // Customize the color as needed
-                    ),
-                  ),
-                ),
-              ),
-            ],
+        children: [
+          DarkBgButtonWidget(
+            text: 'Individual',
+            screen: I_RegistrationForm(),
           ),
-          const SizedBox(height: 15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: userTypeModel.isCompany ? Colors.white : Colors.transparent,
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    setState(() {
-                      userTypeModel.isCompany = true;
-                      userTypeModel.isIndividual = false;
-                    });
-                    _navigateToRegistrationForm(context, false);
-                  },
-                  child: const Text(
-                    'Company',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white, // Customize the color as needed
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          SizedBox(height: 16.0), // Adds space between the buttons
+          DarkBgButtonWidget(
+            text: 'Company',
+            screen: C_RegistrationForm(),
           ),
-          const SizedBox(height: 4 * TSizes.spaceBtwInputFields),
         ],
       ),
     );

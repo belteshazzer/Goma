@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goma/utils/constants/colors.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 
 import '../../../../../../utils/helpers/helper_functions.dart';
@@ -39,7 +40,11 @@ class CreateBtn extends StatelessWidget {
             }
           }
         },
-        child: const Text('create account'),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: THelperFunctions.isDarkMode(context) ? TColors.light:TColors.dark,
+          side: const BorderSide(color: Colors.grey, ),
+        ),
+        child:  Text('create account',style: TextStyle(color: THelperFunctions.isDarkMode(context)? TColors.dark : TColors.light),),
       ),
     );
   }

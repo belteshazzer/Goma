@@ -38,7 +38,7 @@ class ChooseUserType extends StatelessWidget {
                 const SizedBox(
                   height: TSizes.spaceBtwInputFields,
                 ),
-                const CheckBoxes(),
+                const SelectUserType(),
                 const SizedBox(
                   height: TSizes.spaceBtwInputFields,
                 ),
