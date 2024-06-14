@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../../../utils/helpers/helper_functions.dart';
 import '../../../../utils/theme/widget_themes/text_theme.dart';
+import '../vehicle_selections.dart';
 
 class PaymentTypeCards extends StatelessWidget {
   final String title;
   final String description;
+  final Widget vehicleSelectionPage;
 
-  const PaymentTypeCards(String s, {super.key, required this.title, required this.description});
+  const PaymentTypeCards({super.key, required this.title, required this.description, required this.vehicleSelectionPage});
   
   @override
   Widget build(BuildContext context) {
@@ -18,28 +20,11 @@ class PaymentTypeCards extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Text(
-                    title,
-                    style: textTheme.headlineMedium,
-                  ),
-                ),
-                Text(
-                  description,
-                  style: textTheme.bodyMedium,
-                ),
-              ],
-            ),
-          ],
-        ),
+      child:  ListTile( 
+        minTileHeight: 40.0,
+        title: Text(title),
+        subtitle: Text(description),
+        onTap: () {THelperFunctions.navigateToScreen(context,   vehicleSelectionPage);}
       ),
     );
   }

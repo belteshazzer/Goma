@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../utils/helpers/helper_functions.dart';
 import '../../../utils/theme/widget_themes/text_theme.dart';
+import 'vehicle_selections.dart';
 import 'widgets/Payment_list_card.dart';
 import 'widgets/last_payment_item.dart';
 
@@ -10,9 +11,6 @@ class PaymentsPage extends StatelessWidget {
   Widget build(BuildContext context) {
   final textTheme = THelperFunctions.isDarkMode(context)? TTextTheme.darkTextTheme : TTextTheme.lightTextTheme;
 
-  const String insurance='insurance payment';
-  const String insuranceDesc='lorem ipsumm sit amet dolor consecutotor lorem ipsumm sit amet dolor consecutotor';
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Payments', style: textTheme.headlineLarge,),
@@ -21,9 +19,9 @@ class PaymentsPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget> [
-            const PaymentTypeCards("t",title:insurance , description: insuranceDesc),
-            const PaymentTypeCards("t",title:insurance , description: insuranceDesc),
-            const PaymentTypeCards("t",title:insurance , description: insuranceDesc),
+            const PaymentTypeCards(title: 'EDVLCA', description: 'A Payment Made to Ethiopian Drivers and Vehicles Licence and Control Authority for the Renewal of BOLO', vehicleSelectionPage: EDVLCAVehicleSelection(docType: 'EDVLCA',)),
+            const PaymentTypeCards(title: 'Insurance Payment', description: 'pay here for a payment made to an insurance companies you registered for your vehicle', vehicleSelectionPage: EDVLCAVehicleSelection(docType: 'Insurance',)),
+            const PaymentTypeCards(title: 'Road Fund', description: 'pay here for annual utilization of road for a government', vehicleSelectionPage: EDVLCAVehicleSelection(docType: 'Road FUnd',)),
             ClipPath(
               clipper: CurvedClipper(),
               child: Container(
@@ -41,7 +39,7 @@ class PaymentsPage extends StatelessWidget {
             Expanded(
               child: ListView(
                 children: const [
-                  LastPaymentItem(userId: '09867nbv'),
+                  LastPaymentItems(),
                 ],
               ),
             ),

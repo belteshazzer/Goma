@@ -3,6 +3,7 @@ import 'package:goma/Screen/home/home.dart';
 import 'package:goma/Screen/notification/notification.dart';
 import 'package:goma/common/bar/widget/bottomNavBar.dart';
 
+import '../../Screen/paymentScreen/views/payments_page.dart';
 import '../../Screen/vehicle/vehicle_page.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -17,7 +18,7 @@ class _BottomNavigationBar_OutputState extends State<BottomNavBar> {
   int currentIndex = 0;
   final screens = [
     const HomePage(),
-    const NotificationListPage(),
+    const PaymentsPage(),
     const VehicleListPage()
   ];
 
