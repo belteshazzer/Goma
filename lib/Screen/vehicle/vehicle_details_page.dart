@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goma/utils/helpers/helper_functions.dart';
 import 'package:intl/intl.dart'; // Import intl for date formatting
 import 'package:goma/Screen/vehicle/widgets/vehicle_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -70,7 +71,7 @@ class _VehicleDetailState extends State<VehicleDetail> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    bool isDarkMode = theme.brightness == Brightness.dark;
+    bool isDarkMode = THelperFunctions.isDarkMode(context);
     const Color primaryColor = TColors.primary;
     final Color darkColor = isDarkMode ? TColors.primary.withOpacity(.3) : const Color.fromARGB(255, 253, 253, 253);
     final Color textColor = isDarkMode ? Colors.white : Colors.black;
@@ -78,7 +79,6 @@ class _VehicleDetailState extends State<VehicleDetail> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Vehicle Details',),
-        backgroundColor: primaryColor,
       ),
       body: SingleChildScrollView(
         child: Center(

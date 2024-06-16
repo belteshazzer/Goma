@@ -11,7 +11,7 @@ class TransitionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 150,
+      width: 250,
       child: ElevatedButton(
         onPressed: () => THelperFunctions.navigateToScreen(context, destination),
         style: ElevatedButton.styleFrom(

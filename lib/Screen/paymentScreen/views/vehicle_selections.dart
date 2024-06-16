@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goma/Screen/authentication/controllers/SignInController/get_vehicle.dart';
 import 'package:goma/Screen/paymentScreen/views/payment_info_screen.dart';
 import 'package:goma/Screen/vehicle/widgets/vehicleService.dart';
+import 'package:goma/utils/helpers/helper_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/constants/colors.dart';
@@ -9,15 +10,15 @@ import '../../vehicle/vehicle_details_page.dart';
 import '../../vehicle/vehicle_model.dart';
 
 
-class EDVLCAVehicleSelection extends StatefulWidget {
-  const EDVLCAVehicleSelection({super.key, required this.docType});
+class VehicleSelection extends StatefulWidget {
+  const VehicleSelection({super.key, required this.docType});
   final String? docType;
 
   @override
-  _EDVLCAVehicleSelectionState createState() => _EDVLCAVehicleSelectionState();
+  _VehicleSelectionState createState() => _VehicleSelectionState();
 }
 
-class _EDVLCAVehicleSelectionState extends State<EDVLCAVehicleSelection> {
+class _VehicleSelectionState extends State<VehicleSelection> {
   List<Vehicle> vehicles = [];
   String _userToken = '';
   String _ownerId = '';
@@ -59,8 +60,7 @@ class _EDVLCAVehicleSelectionState extends State<EDVLCAVehicleSelection> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    bool isDarkMode = theme.brightness == Brightness.dark;
+    bool isDarkMode = THelperFunctions.isDarkMode(context);
 
     Color textColor = isDarkMode ? TColors.dark : TColors.light;
     Color cardBGColor = isDarkMode ? TColors.lightContainer : TColors.primary;
@@ -79,6 +79,7 @@ class _EDVLCAVehicleSelectionState extends State<EDVLCAVehicleSelection> {
               : vehicles.isEmpty
                   ? const Center(child: Text('No vehicles found'))
                   : ListView.builder(
+                    
                       itemCount: vehicles.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
@@ -86,7 +87,7 @@ class _EDVLCAVehicleSelectionState extends State<EDVLCAVehicleSelection> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => PaymentInformationScreen(vehicle: vehicles[index], docType: widget.docType!),
+                                builder: (context) => PaymentInformationScreen(vehicle: vehicles[index], docType: widget.docType!,userToken: _userToken,),
                               ),
                             );
                           },

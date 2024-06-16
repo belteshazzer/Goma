@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goma/Screen/add_vehicle/widgets/header.dart';
+import 'package:goma/utils/constants/colors.dart';
 import 'package:goma/utils/helpers/helper_functions.dart';
 import 'widgets/input_form.dart';
 
@@ -11,7 +12,11 @@ class AddVehicleScreen extends StatelessWidget {
     final dark = THelperFunctions.isDarkMode(context);
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+            iconTheme:  IconThemeData(
+          color: dark ? TColors.light : TColors.dark, // Set the color of the back button to white
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
             // padding: TSpacingStyle.paddingWithAppBarHeight,

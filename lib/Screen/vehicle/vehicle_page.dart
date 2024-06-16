@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:goma/Screen/add_vehicle/add_vehicle.dart';
 import 'package:goma/Screen/authentication/controllers/SignInController/get_vehicle.dart';
 import 'package:goma/Screen/vehicle/widgets/vehicleService.dart';
+import 'package:goma/utils/helpers/helper_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/constants/colors.dart';
 import 'vehicle_details_page.dart';
@@ -55,17 +58,30 @@ class _VehicleListPageState extends State<VehicleListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    bool isDarkMode = theme.brightness == Brightness.dark;
+    bool isDarkMode =THelperFunctions.isDarkMode(context);
 
     Color textColor = isDarkMode ? TColors.dark : TColors.light;
-    Color cardBGColor = isDarkMode ? TColors.lightContainer : TColors.primary;
 
     return Scaffold(
+      backgroundColor: isDarkMode ? TColors.dark : TColors.light,
       appBar: AppBar(
+         automaticallyImplyLeading: false, 
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddVehicleScreen(),
+                ),
+              );
+            },
+          ),
+        ],
         title: Text(
           'Vehicle List',
-          style: TextStyle(color: cardBGColor),
+          style: TextStyle(color: isDarkMode ? TColors.light : TColors.dark),
         ),
       ),
       body: _isLoading
@@ -89,7 +105,7 @@ class _VehicleListPageState extends State<VehicleListPage> {
                           child: Container(
                             margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                             child: Card(
-                              color: cardBGColor,
+                              color: isDarkMode ? TColors.light : TColors.dark,
                               elevation: 4,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -101,7 +117,7 @@ class _VehicleListPageState extends State<VehicleListPage> {
                                   children: [
                                     Row(
                                       children: [
-                                        const Icon(Icons.directions_car, color: TColors.primary),
+                                         Icon(Icons.directions_car, color: textColor),
                                         const SizedBox(width: 12),
                                         Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,

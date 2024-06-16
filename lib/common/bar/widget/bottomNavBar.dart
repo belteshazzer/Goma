@@ -1,6 +1,9 @@
 
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:goma/utils/helpers/helper_functions.dart';
+
+import '../../../utils/constants/colors.dart';
 
 class BottomNavigationBarCurved extends StatelessWidget {
   final int currentIndex;
@@ -14,8 +17,9 @@ class BottomNavigationBarCurved extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = THelperFunctions.isDarkMode(context);
     return CurvedNavigationBar(
-      backgroundColor: Colors.white,
+      backgroundColor:isDarkMode ? TColors.dark:TColors.light,  
       animationDuration: const Duration(milliseconds: 300),
       color: Colors.black,
       index: currentIndex,

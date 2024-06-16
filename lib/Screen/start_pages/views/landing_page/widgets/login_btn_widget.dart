@@ -11,17 +11,18 @@ class DarkBgButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-        onPressed: () =>
-            THelperFunctions.navigateToScreen(context,screen),
-        style: ElevatedButton.styleFrom(
-
-          backgroundColor: THelperFunctions.isDarkMode(context)
-          ? TColors.black : TColors.light,
-          side: const BorderSide(color: TColors.grey)
-        ),
-        child:  Text(text,style:THelperFunctions.isDarkMode(context) ? const TextStyle(color: Colors.white):const TextStyle(color: Colors.black)),
-        
-        );
+    return SizedBox(
+      width: 250,
+      child: ElevatedButton(
+          onPressed: () =>
+              THelperFunctions.navigateToScreen(context,screen),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: THelperFunctions.isDarkMode(context) ? TColors.dark : TColors.light,
+            side:  BorderSide(color: THelperFunctions.isDarkMode(context) ? TColors.light : TColors.dark)
+          ),
+          child:  Text(text,style: TextStyle(color: THelperFunctions.isDarkMode(context) ? TColors.light : TColors.dark))
+          
+          ),
+    );
   }
 }

@@ -1,12 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:goma/Screen/api_path.dart';
+import 'package:goma/Screen/map/map.dart';
 import 'package:goma/Screen/notification/notification.dart';
 import 'package:goma/Screen/setting/account.dart';
+import 'package:goma/utils/helpers/helper_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shimmer/shimmer.dart';
+
+import '../../utils/constants/colors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -85,8 +89,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: isDarkMode ? TColors.dark : TColors.light,
       body: SafeArea(
         child: FutureBuilder<void>(
           future: _futureUserData,
@@ -188,7 +193,7 @@ class _HomePageState extends State<HomePage> {
             onPanDown: (_) {
               setState(() {
                 _isUserInteracting = true;
-                _stopAutoScroll();
+                _stopAutoScroll();  
               });
             },
             onPanCancel: () {
@@ -226,7 +231,25 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-        )
+        ),
+        const SizedBox(height: 20), // Add some space before the button
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+          child: ElevatedButton(
+            onPressed: () {
+              // Button action
+              THelperFunctions.navigateToScreen(context, MapScreen());
+            },
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
+            child: const Text('New Action Button'),
+          ),
+        ),
       ],
     );
   }
@@ -344,18 +367,18 @@ class BuildCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: Colors.black,
+        color: Colors.white, // Ensure the card is visible with a white background
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.4),
             spreadRadius: 2,
             blurRadius: 1,
-            offset: const Offset(0, 3), // changes position of shadow
+            offset: const Offset(0, 3), // Changes position of shadow
           ),
         ],
       ),
-      child: Row(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
@@ -363,29 +386,24 @@ class BuildCard extends StatelessWidget {
             size: 100,
             color: Colors.blue,
           ),
-          const SizedBox(width: 20),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                statement,
-                style: const TextStyle(fontSize: 15, color: Colors.white),
+          const SizedBox(height: 10),
+          Text(
+            statement,
+            style: const TextStyle(fontSize: 15, color: Colors.black),
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () {
+              // Button action
+            },
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
               ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  // Button action
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-                child: const Text('Pay Now'),
-              ),
-            ],
+            ),
+            child: const Text('Pay Now'),
           ),
         ],
       ),

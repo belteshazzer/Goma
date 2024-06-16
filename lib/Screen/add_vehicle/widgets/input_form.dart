@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:goma/Screen/home/home.dart';
 import 'package:goma/common/bar/bar.dart';
+import 'package:goma/utils/constants/colors.dart';
+import 'package:goma/utils/helpers/helper_functions.dart';
 import 'package:iconsax/iconsax.dart';
 import '../add_vehicles_controller.dart';
 import '../../../utils/constants/sizes.dart';
@@ -40,6 +42,7 @@ class _InputFormState extends State<InputForm> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = THelperFunctions.isDarkMode(context);
     return Form(
       key: _formKey,
       child: Padding(
@@ -57,7 +60,7 @@ class _InputFormState extends State<InputForm> {
               child: ElevatedButton(
                 onPressed: _submitForm,
                 style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFF003A91)),
+                  backgroundColor: WidgetStateProperty.all<Color>(isDarkMode ? TColors.light : TColors.dark),
                 ),
                 child: const Text(TTexts.addVehicle),
               ),
@@ -67,25 +70,31 @@ class _InputFormState extends State<InputForm> {
       ),
     );
   }
-
-  Widget _buildTextField({required TextEditingController controller, required String label}) {
-    return Container(
-      color: const Color(0xFF003A91).withOpacity(0.6),
-      child: TextFormField(
-        controller: controller,
-        decoration: InputDecoration(
-          prefixIcon: const Icon(Iconsax.direct),
-          labelText: label,
+Widget _buildTextField({required TextEditingController controller, required String label}) {
+  final isDarkMode = THelperFunctions.isDarkMode(context);
+  return Container(
+    decoration: BoxDecoration(
+      color: isDarkMode ? TColors.darkerGrey : TColors.lightGrey,
+      borderRadius: BorderRadius.circular(16),
+    ),
+    child: TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        prefixIcon: const Icon(Iconsax.direct),
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
         ),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter $label';
-          }
-          return null;
-        },
       ),
-    );
-  }
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter $label';
+        }
+        return null;
+      },
+    ),
+  );
+}
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
