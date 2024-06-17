@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:goma/Screen/authentication/controllers/SignInController/get_vehicle.dart';
 import 'package:goma/Screen/paymentScreen/views/payment_info_screen.dart';
-import 'package:goma/Screen/vehicle/widgets/vehicleService.dart';
 import 'package:goma/utils/helpers/helper_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/constants/colors.dart';
-import '../../vehicle/vehicle_details_page.dart';
 import '../../vehicle/vehicle_model.dart';
 
 

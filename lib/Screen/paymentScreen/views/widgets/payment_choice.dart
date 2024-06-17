@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 
 class PaymentMethodChoice extends StatelessWidget {
+  const PaymentMethodChoice({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -68,7 +70,7 @@ class PaymentMethodChoice extends StatelessWidget {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               PaymentGatewayOption(
@@ -117,7 +119,7 @@ class PaymentGatewayOption extends StatelessWidget {
   final IconData icon;
   final String label;
 
-  PaymentGatewayOption({required this.icon, required this.label});
+  const PaymentGatewayOption({super.key, required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {

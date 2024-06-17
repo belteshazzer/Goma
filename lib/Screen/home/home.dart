@@ -238,7 +238,7 @@ class _HomePageState extends State<HomePage> {
           child: ElevatedButton(
             onPressed: () {
               // Button action
-              THelperFunctions.navigateToScreen(context, MapScreen());
+              // THelperFunctions.navigateToScreen(context, const MapScreen());
             },
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,

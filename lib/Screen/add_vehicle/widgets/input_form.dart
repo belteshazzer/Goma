@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:goma/Screen/home/home.dart';
 import 'package:goma/common/bar/bar.dart';
 import 'package:goma/utils/constants/colors.dart';
 import 'package:goma/utils/helpers/helper_functions.dart';
@@ -101,7 +100,7 @@ Widget _buildTextField({required TextEditingController controller, required Stri
       final chassisNumber = int.parse(chassisNoController.text);
       final insuranceCompanyName = insuranceCompanyController.text;
       final plateNumber = int.parse(plateNumberController.text);
-      print("user token ${_userToken}");
+      print("user token $_userToken");
       final result = await apiService.addVehicle(
         chassisNumber: chassisNumber,
         insuranceCompanyName: insuranceCompanyName,
@@ -110,14 +109,14 @@ Widget _buildTextField({required TextEditingController controller, required Stri
       );
 
       if (result['status'] == 'success') {
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   const SnackBar(
-        //     content: Text('Vehicle added successfully!', style: TextStyle(color: Colors.white)),
-        //     backgroundColor: Colors.green,
-        //     duration: Duration(seconds: 1),
-        //     behavior: SnackBarBehavior.floating,
-        //   ),
-        // );
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Vehicle added successfully!', style: TextStyle(color: Colors.white)),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 1),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
         _showAddMoreVehiclesDialog();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

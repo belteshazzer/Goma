@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goma/utils/helpers/helper_functions.dart';
-import 'package:intl/intl.dart'; // Import intl for date formatting
+// Import intl for date formatting
 import 'package:goma/Screen/vehicle/widgets/vehicle_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/constants/colors.dart';
@@ -12,7 +12,7 @@ import 'dart:convert';
 class VehicleDetail extends StatefulWidget {
   final Vehicle vehicle;
 
-  const VehicleDetail({Key? key, required this.vehicle}) : super(key: key);
+  const VehicleDetail({super.key, required this.vehicle});
 
   @override
   State<VehicleDetail> createState() => _VehicleDetailState();

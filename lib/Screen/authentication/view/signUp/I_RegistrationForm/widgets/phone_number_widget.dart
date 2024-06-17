@@ -35,7 +35,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0), // Adjust the value to make it less curved
-          borderSide: BorderSide(color: Colors.blue),
+          borderSide: const BorderSide(color: Colors.blue),
         ),
         suffixIcon: IconButton(
           icon: const Icon(Icons.close, color: Colors.grey, size: 18),

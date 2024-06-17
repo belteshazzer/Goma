@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:goma/Screen/add_vehicle/add_vehicle.dart';
 import 'package:goma/Screen/authentication/controllers/SignInController/get_vehicle.dart';
-import 'package:goma/Screen/vehicle/widgets/vehicleService.dart';
 import 'package:goma/utils/helpers/helper_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/constants/colors.dart';
@@ -73,7 +71,7 @@ class _VehicleListPageState extends State<VehicleListPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AddVehicleScreen(),
+                  builder: (context) => const AddVehicleScreen(),
                 ),
               );
             },

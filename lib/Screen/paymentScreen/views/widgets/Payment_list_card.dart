@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goma/utils/constants/colors.dart';
-import 'package:goma/utils/constants/sizes.dart';
 import '../../../../utils/helpers/helper_functions.dart';
-import '../../../../utils/theme/widget_themes/text_theme.dart';
-import '../vehicle_selections.dart';
 
 class PaymentTypeCards extends StatelessWidget {
   final String title;

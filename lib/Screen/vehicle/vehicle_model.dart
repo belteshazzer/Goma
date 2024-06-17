@@ -2,7 +2,7 @@ class Owner {
   final String username;
   final String email;
   final String firstName;
-  final String middleName;
+  final String? middleName;
   final String lastName;
 
   Owner({
@@ -29,12 +29,14 @@ class Vehicle {
   final String plateNumber;
   final String chassisNumber;
   final Owner owner;
+  final String uniqueId;
 
   Vehicle({
     required this.id,
     required this.plateNumber,
     required this.chassisNumber,
     required this.owner,
+    required this.uniqueId,
   });
 
   factory Vehicle.fromJson(Map<String, dynamic> json) {
@@ -46,6 +48,7 @@ class Vehicle {
       chassisNumber: json['chassis_number'] as String? ?? '',
       plateNumber: json['plate_number'] as String? ?? '',
       owner: Owner.fromJson(json['owner']),
+      uniqueId: json['unique_id'] as String? ?? '',
     );
   }
 }

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:goma/Screen/authentication/view/login/login.dart';
-import 'package:goma/utils/constants/text_strings.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../../../utils/theme/widget_themes/text_theme.dart';
 import '../../../authentication/view/signUp/userType/user_type.dart';
 import 'widgets/transition_btn_widget.dart';
 import 'widgets/login_btn_widget.dart';
-import 'widgets/logo_widget.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});

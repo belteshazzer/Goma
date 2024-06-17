@@ -1,13 +1,19 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:goma/Screen/api_path.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'package:shimmer/shimmer.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:open_file/open_file.dart';
+
+import '../../../api_path.dart';
+import 'full_payment_history.dart'; 
 
 class PaymentHistoryPage extends StatefulWidget {
+  const PaymentHistoryPage({super.key});
+
   @override
   _PaymentHistoryPageState createState() => _PaymentHistoryPageState();
 }
@@ -17,6 +23,9 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
   String _userToken = '';
   List<LastPaymentHistory> _paymentHistory = [];
   bool _isLoading = true;
+  double _progress = 0.0;
+  File? _pdfFile;
+  final Dio _dio = Dio();
 
   @override
   void initState() {
@@ -35,17 +44,30 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
 
   Future<void> fetchPaymentHistory() async {
     final url = '$AuthenticationUrl/documents/owner/$_ownerId/';
-    final response = await http.get(Uri.parse(url), headers: {"Authorization": "JWT $_userToken"});
-    print("response: ${response.body}");
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
-      setState(() {
-        _paymentHistory = data.map((item) => LastPaymentHistory.fromJson(item)).toList();
-        _isLoading = false;
-      });
-    } else {
-      // Handle error
-      print('Failed to load payment history');
+    try {
+      final response = await _dio.get(
+        url,
+        options: Options(
+          headers: {"Authorization": "JWT $_userToken"},
+        ),
+      );
+      print("response: ${response.data}");
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+        setState(() {
+          _paymentHistory =
+              data.map((item) => LastPaymentHistory.fromJson(item)).toList();
+          _isLoading = false;
+        });
+      } else {
+        // Handle error
+        print('Failed to load payment history');
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('Error fetching payment history: $e');
       setState(() {
         _isLoading = false;
       });
@@ -53,34 +75,42 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
   }
 
   Future<void> _generateAndDownloadFile(String documentId) async {
-    final url = '$AuthenticationUrl/files/gen_files/$documentId';
-    final response = await http.get(Uri.parse(url), headers: {"Authorization": "JWT $_userToken"});
-    final directory = await getExternalStorageDirectory();
-    final savePath ='${directory!.path}/$documentId.pdf'; // Save file with .pdf extension
+    final url = '$AuthenticationUrl/files/gen_files/$documentId/';
 
-    if (response.statusCode == 200) {
-      final taskId = await FlutterDownloader.enqueue(
-        url: url,
-        savedDir: directory.path,
-        fileName: '$documentId.pdf', // Save file with .pdf extension
-        showNotification: true,
-        openFileFromNotification: true,
+    try {
+      final response = await _dio.get(
+        url,
+        options: Options(
+          headers: {"Authorization": "JWT $_userToken"},
+          responseType: ResponseType.bytes,
+        ),
+        onReceiveProgress: (received, total) {
+          if (total != -1) {
+            setState(() {
+              _progress = received / total;
+            });
+          }
+        },
       );
 
-      FlutterDownloader.registerCallback((id, status, progress) {
-        if (taskId == id && status == DownloadTaskStatus.complete) {
-          print('Download task is complete');
-          // Handle file download completion
-        }
-      });
-      print('File downloaded successfully');
-    } else {
-      // Handle error based on response status code
-      if (response.statusCode == 404) {
-        print('File not found');
+      if (response.statusCode == 200) {
+        final bytes = response.data;
+        final tempDir = await getTemporaryDirectory();
+        final file = File('${tempDir.path}/goma-${documentId.substring(documentId.length - 5)}.pdf');
+        await file.writeAsBytes(bytes);
+
+        setState(() {
+          _isLoading = false;
+          _pdfFile = file; // Store the file for PDFView
+        });
+
+        // Open the file using open_file package
+        await OpenFile.open(file.path);
       } else {
-        print('Failed to download file');
+        throw 'Failed to download PDF';
       }
+    } catch (e) {
+      print('Error downloading PDF: $e');
     }
   }
 
@@ -88,9 +118,21 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: _isLoading ? _buildShimmerEffect() : _buildPaymentHistoryList(isDarkMode),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Payment History'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: _isLoading
+            ? _buildShimmerEffect()
+            : Column(
+                children: [
+                  Expanded(child: _buildPaymentHistoryList(isDarkMode)),
+                  _buildViewMoreButton(),
+                ],
+              ),
+      ),
     );
   }
 
@@ -133,22 +175,26 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
               final history = _paymentHistory[index];
               return Card(
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(color: isDarkMode ? Colors.white : Colors.black),
+                  side: BorderSide(
+                      color: isDarkMode ? Colors.white : Colors.black),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 margin: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ListTile(
                   title: Text(
                     history.documentType,
-                    style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                    style: TextStyle(
+                        color: isDarkMode ? Colors.white : Colors.black),
                   ),
                   subtitle: Text(
                     'Renewal Date: ${history.renewalDate}',
-                    style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                    style: TextStyle(
+                        color: isDarkMode ? Colors.white : Colors.black),
                   ),
                   trailing: TextButton(
                     onPressed: () {
-                      _generateAndDownloadFile(history.documentId); // Pass documentId here
+                      _generateAndDownloadFile(
+                          history.documentId); // Pass documentId here
                     },
                     child: const Text(
                       'Download',
@@ -160,6 +206,21 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
             },
           );
   }
+
+  Widget _buildViewMoreButton() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const FullPaymentHistoryPage()),
+          );
+        },
+        child: const Text('View More'),
+      ),
+    );
+  }
 }
 
 class LastPaymentHistory {
@@ -167,7 +228,10 @@ class LastPaymentHistory {
   final String documentType;
   final String renewalDate;
 
-  LastPaymentHistory({required this.documentId, required this.documentType, required this.renewalDate});
+  LastPaymentHistory(
+      {required this.documentId,
+      required this.documentType,
+      required this.renewalDate});
 
   factory LastPaymentHistory.fromJson(Map<String, dynamic> json) {
     return LastPaymentHistory(

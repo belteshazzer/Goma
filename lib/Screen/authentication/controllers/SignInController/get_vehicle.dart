@@ -17,16 +17,11 @@ class GetVehicle {
         List<dynamic> jsonBody = json.decode(response.body);
 
         // Ensure the decoded response is a list
-        if (jsonBody is List) {
-          List<Vehicle> vehicles = jsonBody.map((item) => Vehicle.fromJson(item)).toList();
-          
-          print(vehicles);
-          return vehicles;
-        } else {
-          print('JSON response is not a list');
-          return null;
-        }
-      } else {
+        List<Vehicle> vehicles = jsonBody.map((item) => Vehicle.fromJson(item)).toList();
+        
+        print(vehicles);
+        return vehicles;
+            } else {
         print('Failed to load vehicles. Status Code: ${response.statusCode}');
         return null;
       }

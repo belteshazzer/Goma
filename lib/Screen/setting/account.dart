@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'widget/profile/profileScreen.dart';
 
 class SettingsPage2 extends StatefulWidget {
-  const SettingsPage2({Key? key}) : super(key: key);
+  const SettingsPage2({super.key});
 
   @override
   State<SettingsPage2> createState() => _SettingsPage2State();
@@ -32,18 +32,6 @@ class _SettingsPage2State extends State<SettingsPage2> {
                 _SingleSection(
                   title: "General",
                   children: [
-                    _CustomListTile(
-                      title: "Dark Mode",
-                      icon: Icons.dark_mode_outlined,
-                      trailing: Switch(
-                        value: _isDark,
-                        onChanged: (value) {
-                          setState(() {
-                            _isDark = value;
-                          });
-                        },
-                      ),
-                    ),
                     _CustomListTile(
                       title: "Notifications",
                       icon: Icons.notifications_none_rounded,
@@ -147,12 +135,11 @@ class _CustomListTile extends StatelessWidget {
   final VoidCallback? onTap;
 
   const _CustomListTile({
-    Key? key,
     required this.title,
     required this.icon,
     this.trailing,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -170,10 +157,9 @@ class _SingleSection extends StatelessWidget {
   final List<Widget> children;
 
   const _SingleSection({
-    Key? key,
     this.title,
     required this.children,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -198,7 +184,7 @@ class _SingleSection extends StatelessWidget {
 }
 
 class CalendarPage extends StatelessWidget {
-  const CalendarPage({Key? key}) : super(key: key);
+  const CalendarPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -226,7 +212,7 @@ class CalendarPage extends StatelessWidget {
 }
 
 class HelpFeedbackPage extends StatelessWidget {
-  const HelpFeedbackPage({Key? key}) : super(key: key);
+  const HelpFeedbackPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -242,7 +228,7 @@ class HelpFeedbackPage extends StatelessWidget {
 }
 
 class AboutPage extends StatelessWidget {
-  const AboutPage({Key? key}) : super(key: key);
+  const AboutPage({super.key});
 
   @override
   Widget build(BuildContext context) {

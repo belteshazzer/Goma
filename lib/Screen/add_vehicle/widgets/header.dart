@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/constants/text_strings.dart';
 
@@ -17,11 +16,11 @@ class AddVehicleHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
+        const SizedBox(
           
           height: 150,
           
-          child: const Text(
+          child: Text(
             'G-NOTIFY',
             style: TextStyle(
               fontSize: TSizes.xl,

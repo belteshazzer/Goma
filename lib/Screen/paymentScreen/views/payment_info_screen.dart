@@ -351,7 +351,7 @@ class _PaymentDetailBoxState extends State<PaymentDetailBox> {
     } else if (docType == 'Road Fund') {
       apiUrl = '$AuthenticationUrl/documents/renew_road_fund/$chassisNumber/';
     }
-    print("CHASSIS ${chassisNumber}");
+    print("CHASSIS $chassisNumber");
 
     try {
       final http.Response response = await http.get(Uri.parse(apiUrl),

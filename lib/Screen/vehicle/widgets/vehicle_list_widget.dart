@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:goma/Screen/vehicle/vehicle_model.dart';
-import 'package:goma/Screen/vehicle/widgets/vehicleService.dart';
 import 'package:goma/utils/helpers/helper_functions.dart';
 
 import '../../../utils/constants/colors.dart';
-import '../vehicle_details_page.dart';
 
 class VehicleListWidget extends StatelessWidget {
   final List<Vehicle> vehicles;
@@ -13,12 +11,12 @@ class VehicleListWidget extends StatelessWidget {
   final screen;
 
   const VehicleListWidget({
-    Key? key,
+    super.key,
     required this.screen,
     required this.vehicles,
     required this.isLoading,
     this.error,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

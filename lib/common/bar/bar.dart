@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:goma/Screen/home/home.dart';
-import 'package:goma/Screen/notification/notification.dart';
 import 'package:goma/common/bar/widget/bottomNavBar.dart';
 
 import '../../Screen/paymentScreen/views/payments_page.dart';

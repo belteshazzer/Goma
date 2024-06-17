@@ -71,11 +71,12 @@ dependencies:
   chapa_unofficial: ^0.0.5
   calendar_date_picker2: ^1.0.3
   flutter_pdfview: ^1.3.2
-  flutter_map: ^7.0.1
   latlong2: ^0.9.1
-  geolocator: ^12.0.0
-  flutter_downloader: ^1.11.7
-
+  path_provider: ^2.1.3
+  dio: ^5.4.3+1
+  open_file: ^3.3.2
+  flutter_map: ^7.0.1
+  
   #--------------- ./ PACKAGES END ------------------#
 dev_dependencies:
   flutter_test:

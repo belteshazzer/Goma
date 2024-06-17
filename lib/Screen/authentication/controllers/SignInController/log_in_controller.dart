@@ -69,7 +69,7 @@ class LoginController {
 
           // Fetch vehicles
           List<Vehicle>? vehicles = await GetVehicle.getVehiclesByOwnerId(ownerId, accessToken);
-          print("vehicles ${vehicles}");
+          print("vehicles $vehicles");
 
           if (vehicles == null || vehicles.isEmpty) {
             THelperFunctions.navigateToScreen(context, const AddVehicleScreen());
