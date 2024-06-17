@@ -3,7 +3,7 @@ class NotificationItem {
   final String messageContent;
   final String notificationType;
   final String priorityLevel;
-   bool seen;
+  bool seen;
   final Document document;
 
   NotificationItem({
@@ -17,12 +17,12 @@ class NotificationItem {
 
   factory NotificationItem.fromJson(Map<String, dynamic> json) {
     return NotificationItem(
-      id: json['id'],
-      messageContent: json['message_content'],
-      notificationType: json['notification_type'],
-      priorityLevel: json['priority_level'],
-      seen: json['seen'],
-      document: Document.fromJson(json['document']),
+      id: json['id'] ?? '',
+      messageContent: json['message_content'] ?? '',
+      notificationType: json['notification_type'] ?? '',
+      priorityLevel: json['priority_level'] ?? '',
+      seen: json['seen'] == true,
+      document: Document.fromJson(json['document'] ?? {}),
     );
   }
 }
@@ -46,12 +46,12 @@ class Document {
 
   factory Document.fromJson(Map<String, dynamic> json) {
     return Document(
-      id: json['id'],
-      documentType: json['document_type'],
-      renewalStatus: json['renewal_status'],
-      renewalDate: json['renewal_date'],
-      expiryDate: json['expiry_date'],
-      vehicle: Vehicle.fromJson(json['vehicle']),
+      id: json['id'] ?? '',
+      documentType: json['document_type'] ?? '',
+      renewalStatus: json['renewal_status'] == true,
+      renewalDate: json['renewal_date'] ?? '',
+      expiryDate: json['expiry_date'] ?? '',
+      vehicle: Vehicle.fromJson(json['vehicle'] ?? {}),
     );
   }
 }
@@ -71,10 +71,10 @@ class Vehicle {
 
   factory Vehicle.fromJson(Map<String, dynamic> json) {
     return Vehicle(
-      id: json['id'],
-      chassisNumber: json['chassis_number'],
-      plateNumber: json['plate_number'],
-      owner: Owner.fromJson(json['owner']),
+      id: json['id'] ?? '',
+      chassisNumber: json['chassis_number'] ?? '',
+      plateNumber: json['plate_number'] ?? '',
+      owner: Owner.fromJson(json['owner'] ?? {}),
     );
   }
 }
@@ -96,11 +96,11 @@ class Owner {
 
   factory Owner.fromJson(Map<String, dynamic> json) {
     return Owner(
-      username: json['username'],
-      email: json['email'],
-      firstName: json['first_name'],
+      username: json['username'] ?? '',
+      email: json['email'] ?? '',
+      firstName: json['first_name'] ?? '',
       middleName: json['middle_name'],
-      lastName: json['last_name'],
+      lastName: json['last_name'] ?? '',
     );
   }
 }

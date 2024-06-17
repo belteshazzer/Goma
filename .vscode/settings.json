@@ -1,4 +1,5 @@
 {
     "cmake.sourceDirectory": "/home/fita/Desktop/project/mobile app/flutter/goma/linux",
-    "cmake.ignoreCMakeListsMissing": true
+    "cmake.ignoreCMakeListsMissing": true,
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

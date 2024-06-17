@@ -1,8 +1,8 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
- import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
+import '../../main.dart';
 import 'NotificationService.dart';
 import 'notification_model.dart';
 
@@ -14,11 +14,78 @@ class NotificationListPage extends StatefulWidget {
 }
 
 class _NotificationListPageState extends State<NotificationListPage> {
+  late FirebaseMessaging _messaging;
   List<NotificationItem> _notifications = [];
   String _userToken = '';
   String _ownerId = '';
   bool _isLoading = true;
   String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+    _setupFirebaseMessaging();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+Future<void> _setupFirebaseMessaging() async {
+  _messaging = FirebaseMessaging.instance;
+
+  NotificationSettings settings = await _messaging.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    print('User granted permission');
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Received a message while in the foreground!');
+      if (!mounted) return;
+
+      // Show a local notification
+      NotificationHelper.showNotification(message);
+
+      final data = message.data;
+      setState(() {
+        _notifications.add(
+          NotificationItem(
+            id: data['id'] ?? '',
+            messageContent: message.notification?.body ?? '',
+            notificationType: data['type'] ?? 'Unknown',
+            priorityLevel: data['priorityLevel'] ?? 'Normal',
+            seen: data['seen'] == true,
+            document: Document(
+              id: data['documentId'] ?? '',
+              documentType: data['documentType'] ?? '',
+              renewalStatus: data['renewalStatus'] == true,
+              renewalDate: data['renewalDate'] ?? '',
+              expiryDate: data['expiryDate'] ?? '',
+              vehicle: Vehicle.fromJson(data['vehicle'] ?? {}),
+            ),
+          ),
+        );
+      });
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('Message clicked!');
+      // Handle the notification tap
+    });
+
+    String? token = await _messaging.getToken();
+    print("Firebase Messaging Token: $token");
+    // Save token to your backend if necessary
+  } else {
+    print('User declined or has not accepted permission');
+  }
+}
 
 
   Future<void> _loadUserData() async {
@@ -29,10 +96,12 @@ class _NotificationListPageState extends State<NotificationListPage> {
       print('id and token $_ownerId $_userToken');
       _notifications = await NotificationService.fetchAndShowNotifications(_ownerId, _userToken);
     } catch (e) {
+      if (!mounted) return; // Check if the widget is still mounted
       setState(() {
         _error = e.toString();
       });
     } finally {
+      if (!mounted) return; // Check if the widget is still mounted
       setState(() {
         _isLoading = false;
       });

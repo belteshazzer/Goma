@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
             } else {
               return Stack(
                 children: [
-                  _buildMainContent(),
+                  _buildMainContent(isDarkMode),
                   if (snapshot.connectionState == ConnectionState.waiting)
                     _buildShimmerEffect(),
                 ],
@@ -115,80 +115,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildMainContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: horizontalPadding,
-            vertical: verticalPadding,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text("G-NOTIFY"),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const NotificationListPage()),
-                      );
-                    },
-                    child: Icon(
-                      Icons.notifications_active,
-                      size: 45,
-                      color: Colors.grey[800],
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SettingsPage2()),
-                      );
-                    },
-                    child: Icon(
-                      Icons.person,
-                      size: 45,
-                      color: Colors.grey[800],
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 20),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Welcome ${user?['first_name']},",
-                style: TextStyle(fontSize: 20, color: Colors.grey.shade800),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 25),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 40.0),
-          child: Divider(
-            thickness: 1,
-            color: Color.fromARGB(255, 204, 204, 204),
-          ),
-        ),
-        const SizedBox(height: 25),
-        Container(
+  Widget _buildMainContent(bool isDarkMode) {
+    var container = Container(
           height: 200,
-          color: Colors.white,
+          color: TColors.darkGrey,
           child: GestureDetector(
             onPanDown: (_) {
               setState(() {
@@ -231,7 +161,78 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
+        );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: horizontalPadding,
+            vertical: verticalPadding,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("G-NOTIFY",style: TextStyle(fontSize: 16),),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NotificationListPage()),
+                      );
+                    },
+                    child: Icon(
+                      Icons.notifications_active,
+                      size: 35,
+                      color:isDarkMode ? TColors.white : TColors.dark,
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SettingsPage2()),
+                      );
+                    },
+                    child: Icon(
+                      Icons.person,
+                      size: 35,
+                      color:isDarkMode ? TColors.white : TColors.dark,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
+        const SizedBox(height: 20),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Welcome ${user?['first_name']},",
+                style: TextStyle(fontSize: 20, color: isDarkMode ? TColors.white : TColors.dark),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 25),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 40.0),
+          child: Divider(
+            thickness: 1,
+            color: Color.fromARGB(255, 204, 204, 204),
+          ),
+        ),
+        const SizedBox(height: 25),
+        container,
         const SizedBox(height: 20), // Add some space before the button
         Padding(
           padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -364,6 +365,7 @@ class BuildCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = THelperFunctions.isDarkMode(context);
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -384,7 +386,7 @@ class BuildCard extends StatelessWidget {
           Icon(
             icon,
             size: 100,
-            color: Colors.blue,
+            color: isDarkMode ? TColors.white :  TColors.dark,
           ),
           const SizedBox(height: 10),
           Text(

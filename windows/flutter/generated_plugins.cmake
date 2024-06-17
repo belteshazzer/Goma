@@ -3,7 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  awesome_notifications
+  firebase_core
   smart_auth
   url_launcher_windows
 )
