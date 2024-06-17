@@ -19,20 +19,7 @@ class _NotificationListPageState extends State<NotificationListPage> {
   String _ownerId = '';
   bool _isLoading = true;
   String? _error;
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  @override
-  void initState() {
-    super.initState();
-    _initializeNotifications();
-    _loadUserData();
-  }
-
-  Future<void> _initializeNotifications() async {
-    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  }
 
   Future<void> _loadUserData() async {
     try {
