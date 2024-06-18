@@ -28,10 +28,10 @@ class EmailVerificationScreen extends StatelessWidget {
               const SizedBox(height: 20,),
               Text('please enter the code sent to your email', style: THelperFunctions.isDarkMode(context)? TTextTheme.darkTextTheme.bodySmall:TTextTheme.lightTextTheme.bodySmall,),
               const SizedBox(height: 20,),
-              pinputs(username:email),
+              Pinputs(username:email),
               const SizedBox(height: 30,),
-              TextButton(onPressed: (){}, child: const Text('Didn\'t recieve code?',style: TextStyle(color: TColors.primary, fontFamily: 'Poppins', fontWeight: FontWeight.bold,))),
-              TextButton(onPressed: (){}, child: const Text('Resend',style: TextStyle(color: TColors.primary, fontFamily: 'Poppins', fontWeight: FontWeight.bold,))),
+              TextButton(onPressed: (){}, child: const Text('Didn\'t recieve code?',style: TextStyle(color: TColors.white, fontFamily: 'Poppins', fontWeight: FontWeight.bold,))),
+              TextButton(onPressed: (){}, child: const Text('Resend',style: TextStyle(color: TColors.white, fontFamily: 'Poppins', fontWeight: FontWeight.bold,))),
             ],
           )
         ) ,

@@ -115,7 +115,7 @@ class _TLoginFormState extends State<TLoginForm> {
                     TextButton(
                       onPressed: () => THelperFunctions.navigateToScreen(
                           context, const EmailPage()),
-                      child: const Text(TTexts.forgetPassword),
+                      child: const Text(TTexts.forgetPassword, style: TextStyle(color: TColors.primary),),
                     ),
                   ],
                 ),
@@ -141,7 +141,7 @@ class _TLoginFormState extends State<TLoginForm> {
                       side: const BorderSide(color: Colors.grey),
                     ),
                     child: _isLoading
-                        ? const CircularProgressIndicator()
+                        ? const CircularProgressIndicator(color: TColors.black,)
                         :  Text('Login',style: TextStyle(color:THelperFunctions.isDarkMode(context) ? Colors.black: Colors.white),),
                   ),
                 ),
@@ -149,7 +149,7 @@ class _TLoginFormState extends State<TLoginForm> {
                 if (_errorMessage.isNotEmpty)
                   Text(
                     _errorMessage,
-                    style: const TextStyle(color: Colors.red),
+                    style: const TextStyle(color: TColors.error),
                   ),
 
                 const SizedBox(height: TSizes.spaceBtwItems),

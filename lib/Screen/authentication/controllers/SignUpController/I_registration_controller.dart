@@ -4,9 +4,7 @@ import '../../models/user_model.dart';
 import '../../../api_path.dart';
 
 class IndividualRegistrationController {
-
-  static bool registrationStatus=false;
-  static Future<void> createUser({
+  static Future<bool> createUser({
     required String username,
     required String firstName,
     required String middleName,
@@ -16,7 +14,13 @@ class IndividualRegistrationController {
   }) async {
     final Uri uri = Uri.parse('$AuthenticationUrl/users/in/create/');
 
-    final UserModel userData= UserModel(username: username, first_name: firstName, middle_name: middleName, last_name: lastName, contact: Contact(phone_number:phoneNumber,city:city));
+    final UserModel userData = UserModel(
+      username: username,
+      first_name: firstName,
+      middle_name: middleName,
+      last_name: lastName,
+      contact: Contact(phone_number: phoneNumber, city: city),
+    );
 
     print('Request Payload: ${json.encode(userData.toJson())}');
 
@@ -26,13 +30,11 @@ class IndividualRegistrationController {
         body: json.encode(userData.toJson()),
         headers: {'Content-Type': 'application/json'},
       );
-      print(response);
+      print("response ${response.body} status ${response.statusCode}");
       if (response.statusCode == 201) {
         print('User created successfully');
-        print(response.body);
-        registrationStatus=true;
-      }
-      else if (response.statusCode == 400) {
+        return true;
+      } else if (response.statusCode == 400) {
         print('Bad Request: ${response.body}');
       } else {
         print('Error creating user: ${response.statusCode}');
@@ -41,5 +43,6 @@ class IndividualRegistrationController {
       // Handle network errors
       print('Error creating user: $error');
     }
+    return false;
   }
 }

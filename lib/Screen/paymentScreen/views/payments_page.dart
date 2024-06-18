@@ -22,8 +22,8 @@ class PaymentsPage extends StatelessWidget {
           child: const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget> [
-              PaymentTypeCards(title: 'EDVLCA', description: 'A Payment Made to Ethiopian Drivers and Vehicles Licence and Control Authority for the Renewal of BOLO', vehicleSelectionPage: VehicleSelection(docType: 'EDVLCA',)),
-              PaymentTypeCards(title: 'Insurance Payment', description: 'pay here for a payment made to an insurance companies you registered for your vehicle', vehicleSelectionPage: VehicleSelection(docType: 'Insurance',)),
+              PaymentTypeCards(title: 'EDVLCA(Road Authority)', description: 'A Payment Made to Ethiopian Drivers and Vehicles Licence and Control Authority', vehicleSelectionPage: VehicleSelection(docType: 'EDVLCA',)),
+              PaymentTypeCards(title: 'Insurance Payment', description: 'pay here for a payment made to an insurance company', vehicleSelectionPage: VehicleSelection(docType: 'Insurance',)),
               PaymentTypeCards(title: 'Road Fund', description: 'pay here for annual utilization of road for a government', vehicleSelectionPage: VehicleSelection(docType: 'Road Fund',)),
             
       

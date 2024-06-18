@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:goma/utils/constants/colors.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
@@ -170,7 +171,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
     return _paymentHistory.isEmpty
         ? const Center(child: Text('No history found'))
         : ListView.builder(
-            itemCount: _paymentHistory.length,
+            itemCount:2,
             itemBuilder: (context, index) {
               final history = _paymentHistory[index];
               return Card(
@@ -210,14 +211,14 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
   Widget _buildViewMoreButton() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: ElevatedButton(
+      child: TextButton(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const FullPaymentHistoryPage()),
           );
         },
-        child: const Text('View More'),
+        child:  const Text('View More',style: TextStyle(color: TColors.white),),
       ),
     );
   }

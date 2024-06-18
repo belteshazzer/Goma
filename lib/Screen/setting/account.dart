@@ -18,9 +18,7 @@ class _SettingsPage2State extends State<SettingsPage2> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: _isDark ? ThemeData.dark() : ThemeData.light(),
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: const Text("Settings"),
         ),
@@ -122,9 +120,8 @@ class _SettingsPage2State extends State<SettingsPage2> {
               ],
             ),
           ),
-        ),
-      ),
-    );
+        ));
+   
   }
 }
 
@@ -221,7 +218,7 @@ class HelpFeedbackPage extends StatelessWidget {
         title: const Text("Help & Feedback"),
       ),
       body: const Center(
-        child: Text("Help & Feedback Page"),
+        child: Text("since it is a demo, there is no help or feedback page."),
       ),
     );
   }
@@ -237,7 +234,7 @@ class AboutPage extends StatelessWidget {
         title: const Text("About"),
       ),
       body: const Center(
-        child: Text("About Page"),
+        child: Text("under development by Goma team."),
       ),
     );
   }

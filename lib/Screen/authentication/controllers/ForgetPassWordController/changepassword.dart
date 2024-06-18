@@ -11,6 +11,8 @@ class ChangePassword {
   final String otpCode;
   final String password;
 
+   http.Response? rp ;
+
   bool isLoading = false;
   String errorMessage = '';
 
@@ -27,10 +29,14 @@ class ChangePassword {
         body: json.encode({
           'username': username,
           'password': password,
-          'password_reset_pin': otpCode,
+          'password_reset_pin': int.parse(otpCode),
         }),
         headers: {'Content-Type': 'application/json'},
       );
+
+      rp = response;
+      print("username $username password $password otpCode $otpCode");
+      print("response ${response.body} status ${response.statusCode}");
 
       if (response.statusCode == 200) {
         THelperFunctions.navigateToScreen(context, const LoginScreen());
@@ -39,7 +45,9 @@ class ChangePassword {
         setState(false, errorData['detail']);
       }
     } catch (error) {
-      setState(false, 'Failed to connect to the server. Please try again.');
+      print("error $error");
+      
+      setState(false, rp!.body.substring(2,20));
     }
     return {'isLoading': isLoading, 'errorMessage': errorMessage};
   }

@@ -7,15 +7,9 @@ class LogoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 200,
-      height: 150,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(THelperFunctions.isDarkMode(context)? TImages.darkAppLogo:TImages.lightAppLogo,),
-          fit: BoxFit.contain,
-        ),
-      ),
+    return Center(
+
+      child: Text('G-NOTIFY', style: TextStyle(color: THelperFunctions.isDarkMode(context)? Colors.white: Colors.black, fontSize: 30, fontWeight: FontWeight.bold),),
     );
   }
 }

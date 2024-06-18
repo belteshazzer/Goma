@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shimmer/shimmer.dart';
-
 import '../../utils/constants/colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -39,16 +38,14 @@ class _HomePageState extends State<HomePage> {
 
     final url = Uri.parse("$AuthenticationUrl/users/in/create/$_userId/");
     final http.Response response = await http.get(url, headers: {"Authorization": "JWT $_userToken"});
-    
-    print("response ${response.body} ${response.statusCode}");
+
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       setState(() {
         user = responseData;
       });
     } else {
-      // Handle the case when the status code is not 200
-      print("failed");
+      print("Failed to load user data");
     }
   }
 
@@ -61,7 +58,7 @@ class _HomePageState extends State<HomePage> {
 
   void _startAutoScroll() {
     _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
-      if (!_isUserInteracting) {
+      if (!_isUserInteracting && _scrollController.hasClients) {
         final double maxScrollExtent = _scrollController.position.maxScrollExtent;
         final double pixels = _scrollController.position.pixels;
         if (pixels + 200 >= maxScrollExtent) {
@@ -116,52 +113,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildMainContent(bool isDarkMode) {
-    var container = Container(
-          height: 200,
-          color: TColors.darkGrey,
-          child: GestureDetector(
-            onPanDown: (_) {
-              setState(() {
-                _isUserInteracting = true;
-                _stopAutoScroll();  
-              });
-            },
-            onPanCancel: () {
-              setState(() {
-                _isUserInteracting = false;
-                _startAutoScroll();
-              });
-            },
-            onPanEnd: (_) {
-              setState(() {
-                _isUserInteracting = false;
-                _startAutoScroll();
-              });
-            },
-            child: ListView(
-              controller: _scrollController,
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.all(16.0),
-              children: const [
-                BuildCard(
-                  icon: Icons.policy,
-                  statement: 'Insurance Payment',
-                ),
-                SizedBox(width: 12),
-                BuildCard(
-                  icon: Icons.money,
-                  statement: 'Road Fund Payment',
-                ),
-                SizedBox(width: 12),
-                BuildCard(
-                  icon: Icons.car_rental,
-                  statement: 'Car Renewal Payment',
-                ),
-                SizedBox(width: 12),
-              ],
-            ),
-          ),
-        );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -173,21 +124,20 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("G-NOTIFY",style: TextStyle(fontSize: 16),),
+              const Text("G-NOTIFY", style: TextStyle(fontSize: 16)),
               Row(
                 children: [
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const NotificationListPage()),
+                        MaterialPageRoute(builder: (context) => const NotificationListPage()),
                       );
                     },
                     child: Icon(
                       Icons.notifications_active,
                       size: 35,
-                      color:isDarkMode ? TColors.white : TColors.dark,
+                      color: isDarkMode ? TColors.white : TColors.dark,
                     ),
                   ),
                   const SizedBox(width: 20),
@@ -195,14 +145,13 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const SettingsPage2()),
+                        MaterialPageRoute(builder: (context) => const SettingsPage2()),
                       );
                     },
                     child: Icon(
                       Icons.person,
                       size: 35,
-                      color:isDarkMode ? TColors.white : TColors.dark,
+                      color: isDarkMode ? TColors.white : TColors.dark,
                     ),
                   ),
                 ],
@@ -217,7 +166,7 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Welcome ${user?['first_name']},",
+                "Welcome ${user?['first_name'] ?? ''},",
                 style: TextStyle(fontSize: 20, color: isDarkMode ? TColors.white : TColors.dark),
               ),
             ],
@@ -232,25 +181,56 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         const SizedBox(height: 25),
-        container,
-        const SizedBox(height: 20), // Add some space before the button
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-          child: ElevatedButton(
-            onPressed: () {
-              // Button action
-              THelperFunctions.navigateToScreen(context, const MapScreen());
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
+        Flexible(
+          child: Container(
+            height: 150,
+            color: isDarkMode ? TColors.darkGrey : TColors.lightGrey,
+            child: GestureDetector(
+              onPanDown: (_) {
+                setState(() {
+                  _isUserInteracting = true;
+                  _stopAutoScroll();
+                });
+              },
+              onPanCancel: () {
+                setState(() {
+                  _isUserInteracting = false;
+                  _startAutoScroll();
+                });
+              },
+              onPanEnd: (_) {
+                setState(() {
+                  _isUserInteracting = false;
+                  _startAutoScroll();
+                });
+              },
+              child: ListView(
+                controller: _scrollController,
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.all(8.0),
+                children: const [
+                  BuildCard(
+                    icon: Icons.policy,
+                    statement: 'Insurance Payment',
+                  ),
+                  SizedBox(width: 12),
+                  BuildCard(
+                    icon: Icons.money,
+                    statement: 'Road Fund Payment',
+                  ),
+                  SizedBox(width: 12),
+                  BuildCard(
+                    icon: Icons.car_rental,
+                    statement: 'Car Renewal Payment',
+                  ),
+                  SizedBox(width: 12),
+                ],
               ),
             ),
-            child: const Text('New Action Button'),
           ),
         ),
+        const SizedBox(height: 20),
+        MapNavigatorCard()
       ],
     );
   }
@@ -260,6 +240,7 @@ class _HomePageState extends State<HomePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
+
           padding: EdgeInsets.symmetric(
             horizontal: horizontalPadding,
             vertical: verticalPadding,
@@ -329,86 +310,111 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         const SizedBox(height: 25),
-        Container(
-          height: 200,
-          color: Colors.white,
-          child: ListView(
-            controller: _scrollController,
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.all(16.0),
-            children: List.generate(3, (index) {
-              return Shimmer.fromColors(
-                baseColor: Colors.grey[300]!,
-                highlightColor: Colors.grey[100]!,
-                child: Container(
-                  width: 200,
-                  margin: const EdgeInsets.only(right: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(10.0),
+        Expanded(
+          child: Container(
+            color: Colors.white,
+            child: ListView(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.all(16.0),
+              children: List.generate(3, (index) {
+                return Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Container(
+                    width: 200,
+                    margin: const EdgeInsets.only(right: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
-                ),
-              );
-            }),
+                );
+                }),
+              ),
+            ),
           ),
-        ),
       ],
     );
   }
 }
 
-class BuildCard extends StatelessWidget {
-  const BuildCard({super.key, required this.icon, required this.statement});
 
+class BuildCard extends StatelessWidget {
   final IconData icon;
   final String statement;
+  final VoidCallback? onPressed;
+
+
+  const BuildCard({super.key, 
+    required this.icon,
+    required this.statement,
+    this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
     final isDarkMode = THelperFunctions.isDarkMode(context);
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.white, // Ensure the card is visible with a white background
+    return Card(
+      color: isDarkMode ? TColors.dark : TColors.light,
+      elevation: 3,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.4),
-            spreadRadius: 2,
-            blurRadius: 1,
-            offset: const Offset(0, 3), // Changes position of shadow
-          ),
-        ],
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            size: 100,
-            color: isDarkMode ? TColors.white :  TColors.dark,
-          ),
-          const SizedBox(height: 10),
-          Text(
-            statement,
-            style: const TextStyle(fontSize: 15, color: Colors.black),
-          ),
-          const SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {
-              // Button action
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 40,
+              color: isDarkMode ? TColors.white : TColors.black,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              statement,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            child: const Text('Pay Now'),
-          ),
-        ],
+            if (onPressed != null) ...[
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: onPressed,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isDarkMode ? TColors.white : TColors.black,
+                  foregroundColor:  isDarkMode ? TColors.black : TColors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                child: const Text('Open Map'),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
+}
+
+
+class MapNavigatorCard extends StatelessWidget {
+  const MapNavigatorCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BuildCard(
+      icon: Icons.map,
+      statement: 'Looking for a car Inspection centers?',
+      onPressed: () {
+        THelperFunctions.navigateToScreen(context, MapScreen());
+      },
+    );
+  }
+
+
 }

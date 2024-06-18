@@ -1,8 +1,10 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:goma/utils/helpers/helper_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../main.dart';
+import '../../utils/constants/colors.dart';
 import 'NotificationService.dart';
 import 'notification_model.dart';
 
@@ -110,15 +112,16 @@ Future<void> _setupFirebaseMessaging() async {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: isDarkMode ? TColors.black : TColors.white,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Custom app bar
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 25),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 25),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -128,18 +131,18 @@ Future<void> _setupFirebaseMessaging() async {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        icon: const Icon(Icons.arrow_back, size: 30, color: Colors.black),
+                        icon:  Icon(Icons.arrow_back, size: 30, color: isDarkMode ? TColors.white : TColors.black),
                       ),
                       const SizedBox(width: 10),
-                      const Text(
+                       Text(
                         "Notifications",
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: isDarkMode ? TColors.white : TColors.black),
                       ),
                     ],
                   ),
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(Icons.more_vert, size: 30, color: Colors.black),
+                    icon:  Icon(Icons.more_vert, size: 30, color: isDarkMode ? TColors.white : TColors.black),
                   ),
                 ],
               ),

@@ -20,8 +20,8 @@ class PasswordScreen extends StatelessWidget {
       title: 'Set Your Password',
       theme: THelperFunctions.isDarkMode(context) ? TAppTheme.darkTheme : TAppTheme.lightTheme,
       home: Scaffold(
-        body: SingleChildScrollView(
-          child: Padding(
+        body: Center(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.all(30),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -43,7 +43,7 @@ class PasswordScreen extends StatelessWidget {
                       : TTextTheme.lightTextTheme.bodySmall,
                 ),
                 const SizedBox(height: 20),
-                PasswordApp(username:username, key: passwordAppKey),
+                PasswordApp(username: username, key: passwordAppKey),
                 const SizedBox(height: 20),
               ],
             ),
@@ -82,43 +82,51 @@ class _PasswordAppState extends State<PasswordApp> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(30),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              width: 400,
-              child: FancyPasswordField(
-                controller: _passwordController1,
+    return Center(
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                width: 400,
+                child: FancyPasswordField(
+                  controller: _passwordController1,
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 400,
-              child: FancyPasswordField(
-                controller: _passwordController2,
-                validator: (value) {
-                  if (_passwordController1.text==_passwordController2.text){
-                    return null;
-                  }
-                  return 'Passwords do not match';
-                },
+              const SizedBox(height: 20),
+              SizedBox(
+                width: 400,
+                child: FancyPasswordField(
+                  controller: _passwordController2,
+                  hasStrengthIndicator: false,
+                  validator: (value) {
+                    if (_passwordController1.text == _passwordController2.text) {
+                      return "password match";
+                    }
+                    return 'Passwords do not match';
+                  },
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Theme(data: Theme.of(context).copyWith(
-              elevatedButtonTheme: THelperFunctions.isDarkMode(context)? TElevatedButtonTheme.darkElevatedButtonTheme: TElevatedButtonTheme.lightElevatedButtonTheme,
-            ), child: ElevatedButton(
-                onPressed: _submitPassword,
-                child: const Text('Finish'),
+              const SizedBox(height: 20),
+              Theme(
+                data: Theme.of(context).copyWith(
+                  elevatedButtonTheme: THelperFunctions.isDarkMode(context)
+                      ? TElevatedButtonTheme.darkElevatedButtonTheme
+                      : TElevatedButtonTheme.lightElevatedButtonTheme,
+                ),
+                child: ElevatedButton(
+                  onPressed: _submitPassword,
+                  child: const Text('Finish'),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -127,17 +135,16 @@ class _PasswordAppState extends State<PasswordApp> {
   void _submitPassword() async {
     String password1 = _passwordController1.text;
     String password2 = _passwordController2.text;
-    
+
     if (password1 == password2) {
       SubmitPassword.submitPassword(widget.username, password1);
-      if(SubmitPassword.passwordAccepted){
+      if (SubmitPassword.passwordAccepted) {
         THelperFunctions.navigateToScreen(context, const LoginScreen());
-      }
-      else{
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(SubmitPassword.errorMsg??'')));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(SubmitPassword.errorMsg ?? '')));
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('password doesn\'t match')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Passwords don't match")));
     }
   }
 }

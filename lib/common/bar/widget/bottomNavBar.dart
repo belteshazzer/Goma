@@ -24,10 +24,10 @@ class BottomNavigationBarCurved extends StatelessWidget {
       color: Colors.black,
       index: currentIndex,
       onTap: onTabTapped,
-      items: const [
-        Icon(Icons.home, color: Colors.white),
-        Icon(Icons.payment, color: Colors.white),
-        Icon(Icons.directions_car, color: Colors.white),
+      items:  const [
+        Icon(Icons.home, color: TColors.light ),
+        Icon(Icons.payment, color: TColors.light ),
+        Icon(Icons.directions_car, color: TColors.light ),
       ],
     );
   }
