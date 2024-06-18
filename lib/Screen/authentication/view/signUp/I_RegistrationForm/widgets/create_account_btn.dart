@@ -32,7 +32,7 @@ class CreateBtn extends StatelessWidget {
           if (formKey.currentState?.validate() ?? false) {
             final phoneNumber = phoneNumberNotifier?.value.international ?? '';
 
-            bool registrationSuccess = await IndividualRegistrationController.createUser(
+            final result = await IndividualRegistrationController.createUser(
               username: controllers[4].text,
               firstName: controllers[0].text,
               middleName: controllers[1].text,
@@ -41,15 +41,14 @@ class CreateBtn extends StatelessWidget {
               city: controllers[3].text,
             );
 
-            if (registrationSuccess) {
+            if (result['success']) {
               THelperFunctions.navigateToScreen(
                 context,
                 EmailVerificationScreen(email: controllers[4].text),
               );
             } else {
-              // Handle registration failure (optional)
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Registration failed. Please try again.')),
+                SnackBar(content: Text(result['message'])),
               );
             }
           }

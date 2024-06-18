@@ -1,34 +1,29 @@
+class Contact {
+  final String phoneNumber;
+  final String city;
+
+  Contact({required this.phoneNumber, required this.city});
+
+  Map<String, dynamic> toJson() => {
+        'phone_number': phoneNumber,
+        'city': city,
+      };
+}
 
 class CompanyModel {
-  String username;
-  String company_name;
-  Contact contact;
+  final String username;
+  final String companyName;
+  final Contact contact;
 
   CompanyModel({
     required this.username,
-    required this.company_name,
+    required this.companyName,
     required this.contact,
   });
 
-  Map<String, dynamic> toJson() {
-    return {
-      'username': username,
-      'company_name': company_name,
-      'contact': contact.toJson(),
-    };
-  }
-}
-
-class Contact {
-  String phone_number;
-  String city;
-
-  Contact({this.phone_number='', this.city = ''});
-
-  Map<String, dynamic> toJson() {
-    return {
-      'phone_number': phone_number,
-      'city': city,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        'username': username,
+        'company_name': companyName,
+        'contact': contact.toJson(),
+      };
 }

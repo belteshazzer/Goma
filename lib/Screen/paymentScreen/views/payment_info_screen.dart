@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:goma/Screen/paymentScreen/views/payments_page.dart';
 import 'package:goma/Screen/vehicle/vehicle_model.dart';
 import 'package:goma/utils/constants/colors.dart';
 import 'package:goma/utils/helpers/helper_functions.dart';
@@ -23,7 +24,8 @@ class PaymentInformationScreen extends StatefulWidget {
   final String userToken;
 
   @override
-  _PaymentInformationScreenState createState() => _PaymentInformationScreenState();
+  _PaymentInformationScreenState createState() =>
+      _PaymentInformationScreenState();
 }
 
 class _PaymentInformationScreenState extends State<PaymentInformationScreen> {
@@ -33,7 +35,8 @@ class _PaymentInformationScreenState extends State<PaymentInformationScreen> {
   @override
   void initState() {
     super.initState();
-    _documentFuture = DocumentFetcher.fetchDocument(widget.vehicle.chassisNumber, widget.docType!, widget.userToken);
+    _documentFuture = DocumentFetcher.fetchDocument(
+        widget.vehicle.chassisnumber, widget.docType!, widget.userToken);
     _documentFuture!.then((document) {
       if (document != null) {
         setState(() {
@@ -52,7 +55,25 @@ class _PaymentInformationScreenState extends State<PaymentInformationScreen> {
 
       // Process the verification result
       if (verificationResult['status'] == 'success') {
-        print('Payment verification successful: $verificationResult');
+        // Show a dialog popup box to indicate successful payment
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Payment Successful'),
+              content: const Text('Your payment was successful.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    THelperFunctions.navigateToScreen(
+                        context, const PaymentsPage());
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
       } else {
         print('Payment verification failed: $verificationResult');
       }
@@ -68,6 +89,7 @@ class _PaymentInformationScreenState extends State<PaymentInformationScreen> {
         context: context,
         onInAppPaymentSuccess: (successMsg) async {
           // Handle success events
+          print("before verifyPayment ");
           await verifyPayment(txRef);
 
           print("docType: ${widget.docType}");
@@ -75,7 +97,7 @@ class _PaymentInformationScreenState extends State<PaymentInformationScreen> {
           if (widget.docType == 'EDVLCA') {
             // Update the payment status of the document
             final url = Uri.parse(
-                "$AuthenticationUrl/documents/renew_road_authority/${widget.vehicle.chassisNumber}/");
+                "$AuthenticationUrl/documents/renew_road_authority/${widget.vehicle.chassisnumber}/");
             final body = json.encode({'transaction_code': txRef});
 
             final http.Response response = await http.put(url,
@@ -84,6 +106,7 @@ class _PaymentInformationScreenState extends State<PaymentInformationScreen> {
                   "Content-Type": "application/json"
                 },
                 body: body);
+            print("response ${response.body} ${response.statusCode}");
             if (response.statusCode == 200) {
               print('EDVLCA Payment status updated successfully');
             } else {
@@ -91,7 +114,7 @@ class _PaymentInformationScreenState extends State<PaymentInformationScreen> {
             }
           } else if (widget.docType == 'Insurance') {
             final url = Uri.parse(
-                "$AuthenticationUrl/documents/renew_insurance/${widget.vehicle.chassisNumber}/");
+                "$AuthenticationUrl/documents/renew_insurance/${widget.vehicle.chassisnumber}/");
 
             final body = json.encode({'transaction_code': txRef});
 
@@ -110,7 +133,7 @@ class _PaymentInformationScreenState extends State<PaymentInformationScreen> {
             }
           } else if (widget.docType == 'Road Fund') {
             final url = Uri.parse(
-                "$AuthenticationUrl/documents/renew_road_fund/${widget.vehicle.chassisNumber}/");
+                "$AuthenticationUrl/documents/renew_road_fund/${widget.vehicle.chassisnumber}/");
             final body = json.encode({'transaction_code': txRef});
 
             final http.Response response = await http.put(url,
@@ -119,6 +142,8 @@ class _PaymentInformationScreenState extends State<PaymentInformationScreen> {
                   "Content-Type": "application/json"
                 },
                 body: body);
+
+            print("response ${response.body} ${response.statusCode}");
             if (response.statusCode == 200) {
               print('Road Fund Payment status updated successfully');
             } else {
@@ -139,10 +164,13 @@ class _PaymentInformationScreenState extends State<PaymentInformationScreen> {
       if (paymentUrl != null) {
         // You can open the paymentUrl in a WebView or an external browser
         print('Payment URL: $paymentUrl');
+      }else {
+        print("payem nu;;");
       }
     } catch (e) {
       // Handle exceptions
-      print('Exception: $e');
+
+      print('Exceptionnnnn: $e');
     }
   }
 
@@ -157,29 +185,33 @@ class _PaymentInformationScreenState extends State<PaymentInformationScreen> {
         title: Text(widget.docType!),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Payment Information', style: textTheme.titleMedium),
-              const Text(
-                  'Your Road authority payment information is given below, please review it and click on "Pay With Chapa" to continue the transaction'),
-              PaymentDetailBox(
-                chassisNumber: widget.vehicle.chassisNumber,
-                docType: widget.docType,
-              ),
-              ElevatedButton(
-                  onPressed: startPayment, child: const Text('Pay With Chapa')),
-              TextButton(
-                  onPressed: () {
-                    THelperFunctions.navigateToScreen(
-                        context,
-                        VehicleSelection(
-                          docType: widget.docType!,
-                        ));
-                  },
-                  child: const Text('Cancel'))
-            ]),
+        padding: const EdgeInsets.all(14.0),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Text('Payment Information', style: textTheme.titleMedium),
+          const SizedBox(
+            height: 15.0,
+          ),
+          Text(
+            'Your ${widget.docType} payment information is given below \nclick on "Pay With Chapa" to continue',
+            style: const TextStyle(fontSize: 13),
+            textAlign: TextAlign.center,
+          ),
+          PaymentDetailBox(
+            chassisNumber: widget.vehicle.chassisnumber,
+            docType: widget.docType,
+          ),
+          ElevatedButton(
+              onPressed: startPayment, child: const Text('Pay With Chapa')),
+          TextButton(
+              onPressed: () {
+                THelperFunctions.navigateToScreen(
+                    context,
+                    VehicleSelection(
+                      docType: widget.docType!,
+                    ));
+              },
+              child: const Text('Cancel'))
+        ]),
       ),
     );
   }
@@ -216,7 +248,8 @@ class _PaymentDetailBoxState extends State<PaymentDetailBox> {
       final Map<String, dynamic> responseData = json.decode(response.body);
       setState(() {
         user = responseData;
-        _documentFuture = DocumentFetcher.fetchDocument(widget.chassisNumber, widget.docType!, _userToken!);
+        _documentFuture = DocumentFetcher.fetchDocument(
+            widget.chassisNumber, widget.docType!, _userToken!);
       });
     } else {
       // Handle the case when the status code is not 200
@@ -245,125 +278,128 @@ class _PaymentDetailBoxState extends State<PaymentDetailBox> {
             return const Center(child: Text('No document found'));
           } else {
             Document document = snapshot.data!;
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Table(
-                  border: TableBorder.all(color: Colors.transparent),
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  children: [
-                    TableRow(
-                      children: [
-                        TableCell(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('Full Name',
-                                style: TextStyle(color: textColor)),
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Table(
+                    border: TableBorder.all(color: Colors.transparent),
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                    children: [
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Full Name',
+                                  style: TextStyle(color: textColor)),
+                            ),
                           ),
-                        ),
-                        TableCell(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                                '${user?['first_name']} ${user?['middle_name']}',
-                                style: TextStyle(color: textColor)),
+                          TableCell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('${user?['first_name']}',
+                                  style: const TextStyle(color: TColors.grey)),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        TableCell(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('plate Number',
-                                style: TextStyle(color: textColor)),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('plate Number',
+                                  style: TextStyle(color: textColor)),
+                            ),
                           ),
-                        ),
-                        TableCell(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(document.plateNumber,
-                                style: TextStyle(color: textColor)),
+                          TableCell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(document.platenumber,
+                                  style: const TextStyle(color: TColors.grey)),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        TableCell(
-                          child: Padding(
-                          
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('Document type',
-                                style: TextStyle(color: textColor)),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Document type',
+                                  style: TextStyle(color: textColor)),
+                            ),
                           ),
-                        ),
-                        TableCell(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(widget.docType!,
-                                style: TextStyle(color: textColor)),
+                          TableCell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(widget.docType!,
+                                  style: const TextStyle(color: TColors.grey)),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        TableCell(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('Deadline',
-                                style: TextStyle(color: textColor)),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Deadline',
+                                  style: TextStyle(color: textColor)),
+                            ),
                           ),
-                        ),
-                        TableCell(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(document.expiryDate,
-                                style: TextStyle(color: textColor)),
+                          TableCell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(document.expiryDate,
+                                  style: const TextStyle(color: TColors.grey)),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        TableCell(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('Amount', style: TextStyle(color: textColor)),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Amount',
+                                  style: TextStyle(color: textColor)),
+                            ),
                           ),
-                        ),
-                        TableCell(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('\$${document.fee.toStringAsFixed(2)}',
-                                style: TextStyle(color: textColor)),
+                          TableCell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                  '${document.fee.toStringAsFixed(2)} ETB',
+                                  style: const TextStyle(color: TColors.grey)),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        TableCell(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('Payment Status',
-                                style: TextStyle(color: textColor)),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Payment Status',
+                                  style: TextStyle(color: textColor)),
+                            ),
                           ),
-                        ),
-                        TableCell(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('undetermined',
-                                style: TextStyle(color: textColor)),
+                          const TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text("Unpaid",
+                                  style: TextStyle(color: TColors.grey)),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             );
           }
         });
@@ -433,10 +469,12 @@ class _PaymentDetailBoxState extends State<PaymentDetailBox> {
 }
 
 class DocumentFetcher {
-  static Future<Document?> fetchDocument(String chassisNumber, String docType, String userToken) async {
+  static Future<Document?> fetchDocument(
+      String chassisNumber, String docType, String userToken) async {
     String apiUrl = '';
     if (docType == 'EDVLCA') {
-      apiUrl = '$AuthenticationUrl/documents/renew_road_authority/$chassisNumber/';
+      apiUrl =
+          '$AuthenticationUrl/documents/renew_road_authority/$chassisNumber/';
     } else if (docType == 'Insurance') {
       apiUrl = '$AuthenticationUrl/documents/renew_insurance/$chassisNumber/';
     } else if (docType == 'Road Fund') {
@@ -444,12 +482,17 @@ class DocumentFetcher {
     }
 
     try {
-      final http.Response response = await http.get(Uri.parse(apiUrl),
-          headers: {"Authorization": "JWT $userToken"});
-
+      final http.Response response = await http
+          .get(Uri.parse(apiUrl), headers: {"Authorization": "JWT $userToken"});
+      print("response ${response.body} ${response.statusCode}");
       if (response.statusCode == 200) {
-        Map<String, dynamic> body = json.decode(response.body);
-        return Document.fromJson(body);
+        Map<dynamic, dynamic> body = json.decode(response.body);
+        if (body is Map<String, dynamic>) {
+          return Document.fromJson(body);
+        } else {
+          print('Unexpected JSON format');
+          return null;
+        }
       } else if (response.statusCode == 400) {
         Map<String, dynamic> body = json.decode(response.body);
         print('Error: ${body['Message']}');
@@ -464,5 +507,3 @@ class DocumentFetcher {
     }
   }
 }
-
-

@@ -7,11 +7,13 @@ import '../../../../../../utils/theme/widget_themes/text_field_theme.dart';
 class TextFieldWidget extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
+  final List<String>? dropdownItems;
 
   const TextFieldWidget({
     super.key,
     required this.controller,
     required this.labelText,
+    this.dropdownItems,
   });
 
   @override
@@ -25,30 +27,64 @@ class TextFieldWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          TextFormField(
-            controller: controller,
-            decoration: InputDecoration(
-              labelText: labelText,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0), // Adjust the value to make it less curved
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0), // Adjust the value to make it less curved
-                borderSide: const BorderSide(color: TColors.grey), // Customize the border color
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0), // Adjust the value to make it less curved
-                borderSide: const BorderSide(color: TColors.light), // Customize the border color when focused
-              ),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'This field is required';
-              }
-              return null;
-            },
-          ),
+          dropdownItems == null
+              ? TextFormField(
+                  controller: controller,
+                  decoration: InputDecoration(
+                    labelText: labelText,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: const BorderSide(color: TColors.grey),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: const BorderSide(color: TColors.light),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This field is required';
+                    }
+                    return null;
+                  },
+                )
+              : DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    labelText: labelText,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: const BorderSide(color: TColors.grey),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: const BorderSide(color: TColors.light),
+                    ),
+                  ),
+                  items: dropdownItems!
+                      .map((item) => DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(item),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    controller.text = value ?? '';
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select $labelText';
+                    }
+                    return null;
+                  },
+                ),
           const SizedBox(height: TSizes.spaceBtwInputFields),
         ],
-      ),);
-  }}
+      ),
+    );
+  }
+}

@@ -41,7 +41,11 @@ class _InputFieldsState extends State<InputFields> {
     TTexts.middleName,
     TTexts.lastName,
     TTexts.address,
-    TTexts.email,
+    TTexts.email
+  ];
+
+  final List<String> _addressOptions = [
+    'Yeka', 'Bole', 'Kolfe', 'Kirkos', 'Nifas Silk-Lafto', 'Akaky Kaliti', 'Addis Ketema', 'Lideta', 'Gullele', 'Arada', 
   ];
 
   @override
@@ -56,11 +60,9 @@ class _InputFieldsState extends State<InputFields> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-    
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-        
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Form(
@@ -80,11 +82,14 @@ class _InputFieldsState extends State<InputFields> {
                           : TTextTheme.lightTextTheme.headlineMedium,
                     ),
                     const SizedBox(height: TSizes.spaceBtwInputFields),
+
                     for (int i = 0; i < _controllers.length-1; i++)
                       TextFieldWidget(
                         controller: _controllers[i],
                         labelText: _labelTexts[i],
+                        dropdownItems: i == 3 ? _addressOptions : null,
                       ),
+          
                     const SizedBox(height: TSizes.spaceBtwInputFields),
                     PhoneNumberField(phoneNumberController: _phoneNumberController),
                     const SizedBox(height: TSizes.spaceBtwInputFields),

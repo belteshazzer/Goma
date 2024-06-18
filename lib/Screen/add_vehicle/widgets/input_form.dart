@@ -15,17 +15,18 @@ class InputForm extends StatefulWidget {
   const InputForm({super.key, required this.dark});
 
   @override
-  _InputFormState createState() => _InputFormState();
+  InputFormState createState() => InputFormState();
 }
 
-class _InputFormState extends State<InputForm> {
+class InputFormState extends State<InputForm> {
   final TextEditingController chassisNoController = TextEditingController();
-  final TextEditingController insuranceCompanyController = TextEditingController();
   final TextEditingController plateNumberController = TextEditingController();
   final ApiService apiService = ApiService();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String _userToken='';
+  String _userToken = '';
+  String? _selectedInsuranceCompany;
+  final List<String> _insuranceCompanies = ['Zemen Insurance', 'Bunna Insurance', 'Nib Insurance', 'Awash Insurance', 'United Insurance', 'Abyssinia Insurance', 'Nile Insurance', 'Oromia Insurance', 'Ethio Life', 'Ethiopian Insurance', 'Africa Insurance', 'Niyala Insurance', 'Tsehay Insurance', 'Berhan Insurance', 'Addis Insurance', 'Guna Insurance'];
 
   Future<void> _loadUserData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -33,6 +34,7 @@ class _InputFormState extends State<InputForm> {
       _userToken = prefs.getString('accessToken') ?? '';
     });
   }
+
   @override
   void initState() {
     super.initState();
@@ -50,7 +52,7 @@ class _InputFormState extends State<InputForm> {
           children: [
             _buildTextField(controller: chassisNoController, label: TTexts.chassisNo),
             const SizedBox(height: TSizes.spaceBtwInputFields),
-            _buildTextField(controller: insuranceCompanyController, label: TTexts.insuranceCompany),
+            _buildDropdownField(),
             const SizedBox(height: TSizes.spaceBtwInputFields),
             _buildTextField(controller: plateNumberController, label: TTexts.plateNumber),
             const SizedBox(height: TSizes.spaceBtwSections),
@@ -59,7 +61,7 @@ class _InputFormState extends State<InputForm> {
               child: ElevatedButton(
                 onPressed: _submitForm,
                 style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(isDarkMode ? TColors.light : TColors.dark),
+                  backgroundColor: MaterialStateProperty.all<Color>(isDarkMode ? TColors.light : TColors.dark),
                 ),
                 child: const Text(TTexts.addVehicle),
               ),
@@ -69,37 +71,75 @@ class _InputFormState extends State<InputForm> {
       ),
     );
   }
-Widget _buildTextField({required TextEditingController controller, required String label}) {
-  final isDarkMode = THelperFunctions.isDarkMode(context);
-  return Container(
-    decoration: BoxDecoration(
-      color: isDarkMode ? TColors.darkerGrey : TColors.lightGrey,
-      borderRadius: BorderRadius.circular(16),
-    ),
-    child: TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Iconsax.direct),
-        labelText: label,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+
+  Widget _buildTextField({required TextEditingController controller, required String label}) {
+    final isDarkMode = THelperFunctions.isDarkMode(context);
+    return Container(
+      decoration: BoxDecoration(
+        color: isDarkMode ? TColors.darkerGrey : TColors.lightGrey,
+        borderRadius: BorderRadius.circular(16),
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter $label';
-        }
-        return null;
-      },
-    ),
-  );
-}
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          prefixIcon: const Icon(Iconsax.direct),
+          labelText: label,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter $label';
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget _buildDropdownField() {
+    final isDarkMode = THelperFunctions.isDarkMode(context);
+    return Container(
+      decoration: BoxDecoration(
+        color: isDarkMode ? TColors.darkerGrey : TColors.lightGrey,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: DropdownButtonFormField<String>(
+        value: _selectedInsuranceCompany,
+        decoration: InputDecoration(
+          prefixIcon: const Icon(Iconsax.direct),
+          labelText: TTexts.insuranceCompany,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        items: _insuranceCompanies.map((String company) {
+          return DropdownMenuItem<String>(
+            value: company,
+            child: Text(company),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          setState(() {
+            _selectedInsuranceCompany = newValue;
+          });
+        },
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please select an insurance company';
+          }
+          return null;
+        },
+      ),
+    );
+  }
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       final chassisNumber = int.parse(chassisNoController.text);
-      final insuranceCompanyName = insuranceCompanyController.text;
-      final plateNumber = int.parse(plateNumberController.text);
+      final insuranceCompanyName = _selectedInsuranceCompany!;
+      final plateNumber = plateNumberController.text;
       print("user token $_userToken");
       final result = await apiService.addVehicle(
         chassisNumber: chassisNumber,
@@ -142,17 +182,19 @@ Widget _buildTextField({required TextEditingController controller, required Stri
             TextButton(
               child: const Text('No, Skip'),
               onPressed: () {
-                Navigator.of(context).pop(); 
-                Get.to(() => const BottomNavBar()); 
+                Navigator.of(context).pop();
+                Get.to(() => const BottomNavBar());
               },
             ),
             TextButton(
               child: const Text('Yes'),
               onPressed: () {
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop();
                 chassisNoController.clear();
-                insuranceCompanyController.clear();
                 plateNumberController.clear();
+                setState(() {
+                  _selectedInsuranceCompany = null;
+                });
               },
             ),
           ],

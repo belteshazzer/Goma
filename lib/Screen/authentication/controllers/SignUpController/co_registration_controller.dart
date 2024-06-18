@@ -4,8 +4,7 @@ import '../../../api_path.dart';
 import '../../models/company_model.dart';
 
 class CoRegistrationController {
-  static bool registrationStatus=false;
-  static Future<void> createUser({
+  static Future<bool> createUser({
     required String username,
     required String companyName,
     required String phoneNumber,
@@ -15,9 +14,9 @@ class CoRegistrationController {
 
     final CompanyModel companyData = CompanyModel(
       username: username,
-      company_name: companyName,
+      companyName: companyName,
       contact: Contact(
-        phone_number: phoneNumber,
+        phoneNumber: phoneNumber,
         city: city,
       ),
     );
@@ -30,22 +29,19 @@ class CoRegistrationController {
         body: json.encode(companyData.toJson()),
         headers: {'Content-Type': 'application/json'},
       );
-      print(response.statusCode);
+      print('response ${response.body} status code ${response.statusCode}');
       if (response.statusCode == 201) {
         print('User created successfully');
         print(response.body);
-        registrationStatus=true;
-
+        return true;
       } else if (response.statusCode == 400) {
-        // Handle Bad Request error
         print('Bad Request: ${response.body}');
       } else {
-        // Handle error
         print('Error creating user: ${response.statusCode}');
       }
     } catch (error) {
-      // Handle network errors
       print('Error creating user: $error');
     }
+    return false;
   }
 }

@@ -121,7 +121,7 @@ class _VehicleListPageState extends State<VehicleListPage> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'chassis no_: ${vehicles[index].chassisNumber}',
+                                              'chassis no_: ${vehicles[index].chassisnumber}',
                                               style: TextStyle(color: textColor),
                                             ),
                                           ],

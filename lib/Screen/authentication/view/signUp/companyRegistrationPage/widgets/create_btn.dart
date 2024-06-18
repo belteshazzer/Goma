@@ -26,26 +26,30 @@ class CreateBtn extends StatelessWidget {
             : TElevatedButtonTheme.lightElevatedButtonTheme,
       ),
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           if (formKey.currentState?.validate() ?? false) {
             final rawPhoneNumber = phoneNumberController?.value.international;
             final formattedPhoneNumber = formatPhoneNumber(rawPhoneNumber);
 
-            CoRegistrationController.createUser(
+            bool success = await CoRegistrationController.createUser(
               username: controllers[2].text,
               companyName: controllers[0].text,
               phoneNumber: formattedPhoneNumber,
               city: controllers[1].text,
             );
-            if(CoRegistrationController.registrationStatus){
+
+            if (success) {
               THelperFunctions.navigateToScreen(
                 context,
                 EmailVerificationScreen(email: controllers[2].text),
               );
+            } else {
+              // Handle registration failure (e.g., show an error message)
+              print('Registration failed');
             }
           }
         },
-        child: const Text('create account'),
+        child: const Text('Create Account'),
       ),
     );
   }
@@ -54,11 +58,10 @@ class CreateBtn extends StatelessWidget {
     if (rawPhoneNumber == null) return '';
     rawPhoneNumber = rawPhoneNumber.replaceAll(RegExp(r'[^\d+]'), '');
 
-    if (rawPhoneNumber.startsWith('+251') && rawPhoneNumber.length == 13) {
-      return '+251 ${rawPhoneNumber.substring(4, 6)} ${rawPhoneNumber.substring(6, 9)} ${rawPhoneNumber.substring(9, 13)}';
+    // Ensure the phone number is in the format +251999999
+    if (rawPhoneNumber.startsWith('+251')) {
+      rawPhoneNumber = rawPhoneNumber.substring(0, 13);
     }
-    print(rawPhoneNumber);
-
     return rawPhoneNumber;
   }
 }

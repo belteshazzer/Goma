@@ -11,7 +11,6 @@ import 'package:goma/Screen/add_vehicle/add_vehicle.dart';
 
 class LoginController {
   static Future<Map<String, dynamic>> login(BuildContext context, String username, String password) async {
-
     final TextEditingController usernameController = TextEditingController(text: username);
     final TextEditingController passwordController = TextEditingController(text: password);
     late SharedPreferences prefs;
@@ -40,7 +39,6 @@ class LoginController {
       );
 
       if (response.statusCode == 200) {
-
         final Map<String, dynamic> responseData = json.decode(response.body);
         final String accessToken = responseData['access'];
         final String refreshToken = responseData['refresh'];
@@ -57,7 +55,8 @@ class LoginController {
           headers: {'Authorization': 'JWT $accessToken'},
         );
         print(userResponse.statusCode);
-        print(userResponse.body); 
+        print(userResponse.body);
+        
         if (userResponse.statusCode == 200) {
           final userData = json.decode(userResponse.body);
           final String ownerId = userData['id'];
@@ -84,8 +83,14 @@ class LoginController {
         final Map<String, dynamic> errorData = json.decode(response.body);
         setState(false, errorData['detail']);
       }
+    } on http.ClientException catch (_) {
+      setState(false, 'Network error. Please check your internet connection.');
     } catch (error) {
-      setState(false, "Server error. Please try again later.");
+      if (error is http.Response && error.statusCode >= 500) {
+        setState(false, 'Server error. Please try again later.');
+      } else {
+        setState(false, 'An unexpected error occurred. Please try again.');
+      }
     }
 
     return {'isLoading': isLoading, 'errorMessage': errorMessage};

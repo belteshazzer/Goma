@@ -61,7 +61,7 @@ class VehicleListWidget extends StatelessWidget {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Plate no_: ${vehicles[index].plateNumber}',
+                                            'Plate no_: ${vehicles[index].platenumber}',
                                             style: TextStyle(color: textColor),
                                           ),
                                         ],

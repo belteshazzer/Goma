@@ -26,7 +26,6 @@ class PaymentsPage extends StatelessWidget {
               PaymentTypeCards(title: 'Insurance Payment', description: 'pay here for a payment made to an insurance company', vehicleSelectionPage: VehicleSelection(docType: 'Insurance',)),
               PaymentTypeCards(title: 'Road Fund', description: 'pay here for annual utilization of road for a government', vehicleSelectionPage: VehicleSelection(docType: 'Road Fund',)),
             
-      
               Expanded(
                 child: PaymentHistoryPage()
                 ),

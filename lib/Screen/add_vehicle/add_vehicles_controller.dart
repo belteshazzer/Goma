@@ -7,7 +7,7 @@ class ApiService {
   Future<Map<String, dynamic>> addVehicle({
     required int chassisNumber,
     required String insuranceCompanyName,
-    required int plateNumber,
+    required String plateNumber,
     required String token,
   }) async {
     final url = Uri.parse('$AuthenticationUrl/vehicles/add_vehicle/');

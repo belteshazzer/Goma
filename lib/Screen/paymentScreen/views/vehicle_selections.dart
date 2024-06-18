@@ -110,7 +110,7 @@ class _VehicleSelectionState extends State<VehicleSelection> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'chassis no_: ${vehicles[index].chassisNumber}',
+                                              'chassis no_: ${vehicles[index].chassisnumber}',
                                               style: TextStyle(color: textColor),
                                             ),
                                           ],

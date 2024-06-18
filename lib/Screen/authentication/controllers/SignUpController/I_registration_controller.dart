@@ -4,7 +4,7 @@ import '../../models/user_model.dart';
 import '../../../api_path.dart';
 
 class IndividualRegistrationController {
-  static Future<bool> createUser({
+  static Future<Map<String, dynamic>> createUser({
     required String username,
     required String firstName,
     required String middleName,
@@ -13,7 +13,7 @@ class IndividualRegistrationController {
     required String city,
   }) async {
     final Uri uri = Uri.parse('$AuthenticationUrl/users/in/create/');
-
+    print('uri: $uri');
     final UserModel userData = UserModel(
       username: username,
       first_name: firstName,
@@ -30,19 +30,33 @@ class IndividualRegistrationController {
         body: json.encode(userData.toJson()),
         headers: {'Content-Type': 'application/json'},
       );
+
       print("response ${response.body} status ${response.statusCode}");
-      if (response.statusCode == 201) {
-        print('User created successfully');
-        return true;
-      } else if (response.statusCode == 400) {
-        print('Bad Request: ${response.body}');
-      } else {
-        print('Error creating user: ${response.statusCode}');
+      
+      switch (response.statusCode) {
+        case 201:
+          print('User created successfully');
+          return {'success': true};
+        case 400:
+          return {'success': false, 'message': 'Bad Request: ${response.body}'};
+        case 401:
+          return {'success': false, 'message': 'Unauthorized: ${response.body}'};
+        case 403:
+          return {'success': false, 'message': 'Forbidden: ${response.body}'};
+
+        case 409:
+          return {'success': false, 'message': 'User already exists.'};
+        case 500:
+          return {'success': false, 'message': 'Server is currently unavailable. Please try again later.'};
+        default:
+          return {'success': false, 'message': 'Unexpected Error: ${response.statusCode} - ${response.body}'};
       }
-    } catch (error) {
-      // Handle network errors
-      print('Error creating user: $error');
+    } on http.ClientException catch (e) {
+      return {'success': false, 'message': 'Network Error: $e'};
+    } on FormatException catch (e) {
+      return {'success': false, 'message': 'Invalid Response Format: $e'};
+    } catch (e) {
+      return {'success': false, 'message': 'Unexpected Error: $e'};
     }
-    return false;
   }
 }
