@@ -17,6 +17,7 @@ class C_RegistrationForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'create company acoount',
       home: InputFields(),
     );

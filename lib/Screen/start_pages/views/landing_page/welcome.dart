@@ -17,6 +17,7 @@ class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Welcome to Goma Notify',
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,

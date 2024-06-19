@@ -112,19 +112,7 @@ flutter:
 
 
   fonts:
-    - family: ZyphyteCondense
-      fonts:
-        - asset: assets/fonts/ZyphyteCondense-Regular.ttf
-
-    - family: GideonRoman
-      fonts:
-        - asset: assets/fonts/GideonRoman-Regular.ttf
-    - family: Goldman
-      fonts:
-        - asset: assets/fonts/Goldman-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/Goldman-Bold.ttf
-          weight: 500
+  
     - family: Poppins
       fonts:
         - asset: assets/fonts/Poppins-Light.ttf

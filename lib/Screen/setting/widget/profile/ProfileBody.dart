@@ -171,7 +171,7 @@ class ProfileBody extends StatelessWidget {
               Row(
                 children: [
                   const Text(
-                    'City:',
+                    'Address:',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),

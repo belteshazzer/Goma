@@ -13,6 +13,7 @@ class ChooseUserType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
         title: 'choose user type',
         theme: THelperFunctions.isDarkMode(context)
             ? TAppTheme.darkTheme

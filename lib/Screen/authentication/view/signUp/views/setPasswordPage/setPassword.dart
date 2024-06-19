@@ -18,6 +18,7 @@ class PasswordScreen extends StatelessWidget {
     GlobalKey<_PasswordAppState> passwordAppKey = GlobalKey();
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Set Your Password',
       theme: THelperFunctions.isDarkMode(context) ? TAppTheme.darkTheme : TAppTheme.lightTheme,
       home: Scaffold(

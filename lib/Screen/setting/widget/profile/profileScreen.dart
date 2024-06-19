@@ -3,6 +3,7 @@ import 'package:goma/Screen/setting/widget/profile/ProfileBody.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:shimmer/shimmer.dart'; // Import the shimmer package
 import '../../../api_path.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -21,6 +22,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // Edit mode flag
   bool isEditMode = false;
+
+  // Data loading flag
+  bool isLoading = true;
 
   // Form key for validation
   final _formKey = GlobalKey<FormState>();
@@ -64,10 +68,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         user = responseData;
         _updateControllers();
+        isLoading = false;
       });
     } else {
       // Handle the case when the status code is not 200
       print("Failed to load user data");
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -107,7 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         'email': _emailController.text
       }),
     );
-    
+
     if (response.statusCode == 200) {
       setState(() {
         user!['username'] = _usernameController.text;
@@ -169,8 +177,93 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ],
       ),
-      body: ProfileBody(formKey: _formKey, emailController: _emailController, isEditMode: isEditMode, firstNameController: _firstNameController, middleNameController: _middleNameController, lastNameController: _lastNameController, phoneNumberController: _phoneNumberController, cityController: _cityController),
+      body: isLoading
+          ? _buildShimmerEffect() // Show shimmer effect while loading
+          : ProfileBody(
+              formKey: _formKey,
+              emailController: _emailController,
+              isEditMode: isEditMode,
+              firstNameController: _firstNameController,
+              middleNameController: _middleNameController,
+              lastNameController: _lastNameController,
+              phoneNumberController: _phoneNumberController,
+              cityController: _cityController,
+            ),
     );
   }
+
+Widget _buildShimmerEffect() {
+  return Shimmer.fromColors(
+    baseColor: Colors.grey[300]!,
+    highlightColor: Colors.grey[100]!,
+    child: ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+      children: [
+        // Circle Avatar shimmer
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            children: [
+              Container(
+                width: 80.0,
+                height: 80.0,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              SizedBox(width: 16.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 200.0,
+                    height: 20.0,
+                    color: Colors.white,
+                  ),
+                  SizedBox(height: 8.0),
+                  Container(
+                    width: 150.0,
+                    height: 20.0,
+                    color: Colors.white,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 16.0),
+        // Name field shimmer
+        _shimmerItem(width: double.infinity, height: 40.0),
+        SizedBox(height: 16.0),
+        // Email field shimmer
+        _shimmerItem(width: double.infinity, height: 40.0),
+        SizedBox(height: 16.0),
+        // Phone field shimmer
+        _shimmerItem(width: double.infinity, height: 40.0),
+        SizedBox(height: 16.0),
+        // City field shimmer
+        _shimmerItem(width: double.infinity, height: 40.0),
+        SizedBox(height: 16.0),
+        // Save button shimmer
+        _shimmerItem(width: 150.0, height: 40.0),
+      ],
+    ),
+  );
 }
 
+Widget _shimmerItem({required double width, required double height}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    child: Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+    ),
+  );
+}
+
+}

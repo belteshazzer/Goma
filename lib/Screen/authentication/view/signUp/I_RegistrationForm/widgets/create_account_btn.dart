@@ -7,7 +7,7 @@ import '../../../../../../utils/theme/widget_themes/elevated_button_theme.dart';
 import '../../../../controllers/SignUpController/I_registration_controller.dart';
 import '../../emailVerificationPage/emailVerification.dart';
 
-class CreateBtn extends StatelessWidget {
+class CreateBtn extends StatefulWidget {
   const CreateBtn({
     required this.controllers,
     required this.phoneNumberNotifier,
@@ -20,6 +20,13 @@ class CreateBtn extends StatelessWidget {
   final GlobalKey<FormState> formKey;
 
   @override
+  _CreateBtnState createState() => _CreateBtnState();
+}
+
+class _CreateBtnState extends State<CreateBtn> {
+  bool isLoading = false;
+
+  @override
   Widget build(BuildContext context) {
     return Theme(
       data: Theme.of(context).copyWith(
@@ -28,43 +35,55 @@ class CreateBtn extends StatelessWidget {
             : TElevatedButtonTheme.lightElevatedButtonTheme,
       ),
       child: ElevatedButton(
-        onPressed: () async {
-          if (formKey.currentState?.validate() ?? false) {
-            final phoneNumber = phoneNumberNotifier?.value.international ?? '';
+        onPressed: isLoading ? null : () async {
+          if (widget.formKey.currentState?.validate() ?? false) {
+            setState(() {
+              isLoading = true;
+            });
+
+            final phoneNumber = widget.phoneNumberNotifier?.value.international ?? '';
 
             final result = await IndividualRegistrationController.createUser(
-              username: controllers[4].text,
-              firstName: controllers[0].text,
-              middleName: controllers[1].text,
-              lastName: controllers[2].text,
+              username: widget.controllers[4].text,
+              firstName: widget.controllers[0].text,
+              middleName: widget.controllers[1].text,
+              lastName: widget.controllers[2].text,
               phoneNumber: phoneNumber,
-              city: controllers[3].text,
+              city: widget.controllers[3].text,
             );
 
             if (result['success']) {
               THelperFunctions.navigateToScreen(
                 context,
-                EmailVerificationScreen(email: controllers[4].text),
+                EmailVerificationScreen(email: widget.controllers[4].text),
               );
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(result['message'])),
               );
             }
+
+            setState(() {
+              isLoading = false;
+            });
           }
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor:
-              THelperFunctions.isDarkMode(context) ? TColors.light : TColors.dark,
-          side: const BorderSide(
-            color: Colors.grey,
-          ),
+          backgroundColor: THelperFunctions.isDarkMode(context) ? TColors.light : TColors.dark,
+          side: const BorderSide(color: Colors.grey),
         ),
-        child: Text(
-          'create account',
-          style: TextStyle(
-              color: THelperFunctions.isDarkMode(context) ? TColors.dark : TColors.light),
-        ),
+        child: isLoading
+            ? CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  THelperFunctions.isDarkMode(context) ? TColors.dark : TColors.light,
+                ),
+              )
+            : Text(
+                'create account',
+                style: TextStyle(
+                  color: THelperFunctions.isDarkMode(context) ? TColors.dark : TColors.light,
+                ),
+              ),
       ),
     );
   }

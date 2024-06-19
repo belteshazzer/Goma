@@ -14,6 +14,7 @@ class EmailVerificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'verify your email',
       theme: THelperFunctions.isDarkMode(context)? TAppTheme.darkTheme: TAppTheme.lightTheme,
       home: Scaffold(

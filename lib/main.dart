@@ -10,6 +10,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
 }
 
+Future<void> _printFCMToken() async {
+  String? token = await FirebaseMessaging.instance.getToken();
+  print("FCM Token: $token");
+}
+
 void main() async {
   Chapa.configure(privateKey: "CHASECK_TEST-CxvyxmF1aBzVXmlguADPpTFdqNXZNjnr"); 
 
@@ -17,6 +22,10 @@ void main() async {
   await NotificationHelper.initialize();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  
+  // Print the FCM token
+  await _printFCMToken();
+
   runApp(const MyApp());
 }
 
@@ -27,21 +36,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-    
+      debugShowCheckedModeBanner : false,
       title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:const SafeArea(child:SplashScreen()),
-      
+      home: const SafeArea(child: SplashScreen()),
     );
   }
 }
-
-
-
 
 class NotificationHelper {
   static final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -60,7 +64,7 @@ class NotificationHelper {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
       'GOMA_ID',
-      'GOMA-NOFICATION',
+      'GOMA-NOTIFICATION',
       importance: Importance.max,
       priority: Priority.high,
     );

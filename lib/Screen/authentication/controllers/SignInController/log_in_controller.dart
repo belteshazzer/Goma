@@ -89,7 +89,7 @@ class LoginController {
       if (error is http.Response && error.statusCode >= 500) {
         setState(false, 'Server error. Please try again later.');
       } else {
-        setState(false, 'An unexpected error occurred. Please try again.');
+        setState(false, 'An unexpected error occurred. Please try again. ${error.toString()}');
       }
     }
 

@@ -28,6 +28,8 @@ class InputFormState extends State<InputForm> {
   String? _selectedInsuranceCompany;
   final List<String> _insuranceCompanies = ['Zemen Insurance', 'Bunna Insurance', 'Nib Insurance', 'Awash Insurance', 'United Insurance', 'Abyssinia Insurance', 'Nile Insurance', 'Oromia Insurance', 'Ethio Life', 'Ethiopian Insurance', 'Africa Insurance', 'Niyala Insurance', 'Tsehay Insurance', 'Berhan Insurance', 'Addis Insurance', 'Guna Insurance'];
 
+  bool isLoading = false;
+
   Future<void> _loadUserData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -59,11 +61,15 @@ class InputFormState extends State<InputForm> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _submitForm,
+                onPressed: isLoading ? null : _submitForm,
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(isDarkMode ? TColors.light : TColors.dark),
                 ),
-                child: const Text(TTexts.addVehicle),
+                child: isLoading
+                    ? CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(isDarkMode ? TColors.dark : TColors.light),
+                      )
+                    : const Text(TTexts.addVehicle),
               ),
             ),
           ],
@@ -137,16 +143,23 @@ class InputFormState extends State<InputForm> {
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        isLoading = true;
+      });
+
       final chassisNumber = int.parse(chassisNoController.text);
       final insuranceCompanyName = _selectedInsuranceCompany!;
       final plateNumber = plateNumberController.text;
-      print("user token $_userToken");
       final result = await apiService.addVehicle(
         chassisNumber: chassisNumber,
         insuranceCompanyName: insuranceCompanyName,
         plateNumber: plateNumber,
         token: _userToken,
       );
+
+      setState(() {
+        isLoading = false;
+      });
 
       if (result['status'] == 'success') {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -182,8 +195,8 @@ class InputFormState extends State<InputForm> {
             TextButton(
               child: const Text('No, Skip'),
               onPressed: () {
-                Navigator.of(context).pop();
-                Get.to(() => const BottomNavBar());
+                // Navigator.of(context).pop();
+                THelperFunctions.navigateToScreen(context, BottomNavBar());
               },
             ),
             TextButton(

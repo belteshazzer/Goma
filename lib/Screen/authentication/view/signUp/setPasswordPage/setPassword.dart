@@ -1,5 +1,6 @@
 import 'package:fancy_password_field/fancy_password_field.dart';
 import 'package:flutter/material.dart';
+import '../../../../../utils/constants/colors.dart';
 import '../../../../../utils/helpers/helper_functions.dart';
 import '../../../../../utils/theme/theme.dart';
 import '../../../../../utils/theme/widget_themes/elevated_button_theme.dart';
@@ -17,6 +18,7 @@ class PasswordScreen extends StatelessWidget {
     GlobalKey<_PasswordAppState> passwordAppKey = GlobalKey();
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Set Your Password',
       theme: THelperFunctions.isDarkMode(context) ? TAppTheme.darkTheme : TAppTheme.lightTheme,
       home: Scaffold(
@@ -65,6 +67,7 @@ class PasswordApp extends StatefulWidget {
 class _PasswordAppState extends State<PasswordApp> {
   late TextEditingController _passwordController1;
   late TextEditingController _passwordController2;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -121,8 +124,14 @@ class _PasswordAppState extends State<PasswordApp> {
                       : TElevatedButtonTheme.lightElevatedButtonTheme,
                 ),
                 child: ElevatedButton(
-                  onPressed: _submitPassword,
-                  child: const Text('Finish'),
+                  onPressed: isLoading ? null : _submitPassword,
+                  child: isLoading
+                      ? CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            THelperFunctions.isDarkMode(context) ? TColors.dark : TColors.light,
+                          ),
+                        )
+                      : const Text('Finish'),
                 ),
               ),
             ],
@@ -137,14 +146,27 @@ class _PasswordAppState extends State<PasswordApp> {
     String password2 = _passwordController2.text;
 
     if (password1 == password2) {
-      SubmitPassword.submitPassword(widget.username, password1);
+      setState(() {
+        isLoading = true;
+      });
+
+      final result = await SubmitPassword.submitPassword(widget.username, password1);
+
+      setState(() {
+        isLoading = false;
+      });
+
       if (SubmitPassword.passwordAccepted) {
         THelperFunctions.navigateToScreen(context, const LoginScreen());
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(SubmitPassword.errorMsg ?? '')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(SubmitPassword.errorMsg ?? 'Error')),
+        );
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Passwords don't match")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Passwords don't match")),
+      );
     }
   }
 }
