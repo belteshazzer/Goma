@@ -57,8 +57,14 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data;
         setState(() {
-          _paymentHistory =
-              data.map((item) => LastPaymentHistory.fromJson(item)).toList();
+          _paymentHistory = data
+              .map((item) => LastPaymentHistory.fromJson(item))
+              .toList();
+
+          // Sort the payment history by renewal date in descending order
+          _paymentHistory.sort((a, b) =>
+              DateTime.parse(b.renewalDate).compareTo(DateTime.parse(a.renewalDate)));
+
           _isLoading = false;
         });
       } else {
@@ -172,7 +178,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
     return _paymentHistory.isEmpty
         ? const Center(child: Text('No history found'))
         : ListView.builder(
-            itemCount:3,
+            itemCount: _paymentHistory.length,
             itemBuilder: (context, index) {
               final history = _paymentHistory[index];
               return Card(

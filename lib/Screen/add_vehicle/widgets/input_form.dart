@@ -4,10 +4,13 @@ import 'package:goma/common/bar/bar.dart';
 import 'package:goma/utils/constants/colors.dart';
 import 'package:goma/utils/helpers/helper_functions.dart';
 import 'package:iconsax/iconsax.dart';
+import '../../api_path.dart';
 import '../add_vehicles_controller.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/constants/text_strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class InputForm extends StatefulWidget {
   final bool dark;
@@ -26,7 +29,7 @@ class InputFormState extends State<InputForm> {
 
   String _userToken = '';
   String? _selectedInsuranceCompany;
-  final List<String> _insuranceCompanies = ['Zemen Insurance', 'Bunna Insurance', 'Nib Insurance', 'Awash Insurance', 'United Insurance', 'Abyssinia Insurance', 'Nile Insurance', 'Oromia Insurance', 'Ethio Life', 'Ethiopian Insurance', 'Africa Insurance', 'Niyala Insurance', 'Tsehay Insurance', 'Berhan Insurance', 'Addis Insurance', 'Guna Insurance'];
+  List<String> _insuranceCompanies = [];
 
   bool isLoading = false;
 
@@ -37,10 +40,30 @@ class InputFormState extends State<InputForm> {
     });
   }
 
+  Future<void> _fetchInsuranceCompanies() async {
+    final response = await http.get(Uri.parse('$AuthenticationUrl/institutions/'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      setState(() {
+        _insuranceCompanies = data.map((company) => company['name'].toString()).toList();
+      });
+    } else {
+      // Handle the error appropriately
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to fetch insurance companies', style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _loadUserData();
+    _fetchInsuranceCompanies();
   }
 
   @override
@@ -195,7 +218,6 @@ class InputFormState extends State<InputForm> {
             TextButton(
               child: const Text('No, Skip'),
               onPressed: () {
-                // Navigator.of(context).pop();
                 THelperFunctions.navigateToScreen(context, BottomNavBar());
               },
             ),

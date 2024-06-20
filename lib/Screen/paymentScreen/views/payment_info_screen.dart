@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:goma/Screen/paymentScreen/views/payments_page.dart';
 import 'package:goma/Screen/vehicle/vehicle_model.dart';
+import 'package:goma/common/bar/bar.dart';
 import 'package:goma/utils/constants/colors.dart';
 import 'package:goma/utils/helpers/helper_functions.dart';
 import 'package:goma/utils/theme/widget_themes/text_theme.dart';
@@ -66,7 +67,7 @@ class _PaymentInformationScreenState extends State<PaymentInformationScreen> {
                 TextButton(
                   onPressed: () {
                     THelperFunctions.navigateToScreen(
-                        context, const PaymentsPage());
+                        context, const BottomNavBar());
                   },
                   child: const Text('OK'),
                 ),
