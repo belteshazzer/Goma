@@ -22,3 +22,11 @@ This project is a starting point for a Flutter application.
 - Map system for locating bolo inspection providers
 - Digital payment system with chapa
 
+
+
+## Contributors
+- Fita Wegene 
+- Dawit Abraham
+- Daniel Yirdaw
+- Addis Seteye
+
